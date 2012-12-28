@@ -3,9 +3,15 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = build/Mojo
+DESTDIR = bin
 DEPENDPATH += . src
 INCLUDEPATH += . src
+
+#build
+OBJECTS_DIR = build/obj
+MOC_DIR = build/moc
+RCC_DIR = build/rcc
+UI_DIR = build/ui
 
 QT += opengl
 

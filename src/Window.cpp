@@ -35,6 +35,7 @@ void Window::resizeGL(int width, int height){
 void Window::paintGL(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glTranslatef(0.0f,0.0f,-5.0f);
+	// draw a rectangle
 	glBegin(GL_QUADS);
 		glVertex3f(-1.0f,1.0f,0.0f);
 		glVertex3f(1.0f,1.0f,0.0f);
