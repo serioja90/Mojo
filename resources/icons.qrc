@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+	<qresource>
+		<file alias="new-file.png">images/new-file.png</file>
+		<file alias="open-file.png">images/open-file.png</file>
+		<file alias="save-file.png">images/save-file.png</file>
+	</qresource>
+</RCC>

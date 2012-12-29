@@ -3,13 +3,12 @@
 #include <QtOpenGL>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "Window.h"
+#include "GLWidget.h"
 
-Window::Window(QWidget* parent) : QGLWidget(parent){
-
+GLWidget::GLWidget(QWidget* parent) : QGLWidget(parent){
 }
 
-void Window::initGL(){
+void GLWidget::initGL(){
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glShadeModel(GL_SMOOTH);
@@ -22,7 +21,7 @@ void Window::initGL(){
 	glClearDepth(1.0f);
 }
 
-void Window::resizeGL(int width, int height){
+void GLWidget::resizeGL(int width, int height){
 	height = height==0?1:height;
 	glViewport(0,0,width,height);
 	glMatrixMode(GL_PROJECTION);
@@ -32,25 +31,13 @@ void Window::resizeGL(int width, int height){
 	glLoadIdentity();
 }
 
-void Window::paintGL(){
+void GLWidget::paintGL(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glTranslatef(0.0f,0.0f,-5.0f);
-	// draw a rectangle
 	glBegin(GL_QUADS);
 		glVertex3f(-1.0f,1.0f,0.0f);
 		glVertex3f(1.0f,1.0f,0.0f);
 		glVertex3f(1.0f,-1.0f,0.0f);
 		glVertex3f(-1.0f,-1.0f,0.0f);
 	glEnd();
-}
-
-void Window::keyPressEvent(QKeyEvent* event){
-	switch(event->key()){
-		case Qt::Key_Escape:
-			close();
-			break;
-		default:
-			event->ignore();
-			break;
-	}
 }

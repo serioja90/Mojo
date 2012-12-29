@@ -18,5 +18,7 @@ QT += opengl
 LIBS += -lGL -lGLU
 
 # Input
-HEADERS += src/Window.h
-SOURCES += src/main.cpp src/Window.cpp
+HEADERS += src/MainWindow.h src/GLWidget.h
+SOURCES += src/main.cpp src/MainWindow.cpp src/GLWidget.cpp
+
+RESOURCES += resources/icons.qrc
