@@ -3,9 +3,12 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QTabWidget>
+#include <QTextEdit>
 
 class QMenu;
 class QAction;
+class QXmlStreamReader;
 
 class MainWindow : public QMainWindow{
 	Q_OBJECT
@@ -19,7 +22,16 @@ class MainWindow : public QMainWindow{
 		QPushButton* openFileButton;
 		QPushButton* saveFileButton;
 
+		QTabWidget* tabWidget;
+		QTextEdit* textEdit;
+
 		void createToolBar();
+		void parseXml(QByteArray data);
+		void parseObject(QXmlStreamReader& xml);
+		void parseQuad(QXmlStreamReader& xml);
+	private slots:
+		void createNewFile();
+		void openFile();
 };
 
 #endif
