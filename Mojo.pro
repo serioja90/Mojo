@@ -5,7 +5,7 @@
 TEMPLATE = app
 DESTDIR = bin
 DEPENDPATH += . src
-INCLUDEPATH += . src
+INCLUDEPATH += . src/include
 
 #build
 OBJECTS_DIR = build/obj
@@ -18,7 +18,25 @@ QT += opengl
 LIBS += -lGL -lGLU
 
 # Input
-HEADERS += src/MainWindow.h src/GLWidget.h
-SOURCES += src/main.cpp src/MainWindow.cpp src/GLWidget.cpp
+HEADERS +=  src/include/MainWindow.h\
+			src/include/GLWidget.h\
+			src/include/XmlParser.h\
+			src/include/Point.h\
+			src/include/Exception.h\
+			src/include/Line.h\
+			src/include/Triangle.h\
+			src/include/Quad.h\
+			src/include/Polygon.h\
+			src/include/Object.h
+SOURCES +=  src/main.cpp\
+			src/MainWindow.cpp\
+			src/GLWidget.cpp\
+			src/XmlParser.cpp\
+			src/Point.cpp\
+			src/Line.cpp\
+			src/Triangle.cpp\
+			src/Quad.cpp\
+			src/Polygon.cpp\
+			src/Object.cpp
 
 RESOURCES += resources/icons.qrc

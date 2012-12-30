@@ -5,10 +5,10 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QTextEdit>
+#include "XmlParser.h"
 
 class QMenu;
 class QAction;
-class QXmlStreamReader;
 
 class MainWindow : public QMainWindow{
 	Q_OBJECT
@@ -25,10 +25,9 @@ class MainWindow : public QMainWindow{
 		QTabWidget* tabWidget;
 		QTextEdit* textEdit;
 
+		XmlParser* xmlParser;
+
 		void createToolBar();
-		void parseXml(QByteArray data);
-		void parseObject(QXmlStreamReader& xml);
-		void parseQuad(QXmlStreamReader& xml);
 	private slots:
 		void createNewFile();
 		void openFile();

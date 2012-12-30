@@ -76,59 +76,8 @@ void MainWindow::openFile(){
 		file->open(QIODevice::ReadWrite);
 		QByteArray data = file->readAll();
 		QString content(data);
-		parseXml(data);
+		xmlParser = new XmlParser(data);
 		QTextDocument document(content);
 		textEdit->setDocument(new QTextDocument(content));
-	}
-}
-
-void MainWindow::parseXml(QByteArray data){
-	cout << "------------------------" << endl;
-	cout << "Parsing xml file" << endl;
-	QXmlStreamReader xml(data);
-	QList<QXmlStreamReader> objects;
-	while(!xml.atEnd() && !xml.hasError()){
-		if(xml.readNextStartElement()){
-			if(xml.name()=="object"){
-				parseObject(xml);
-			}
-		}
-	}
-	cout << "End of xml parsing" << endl;
-	cout << "------------------------" << endl;
-}
-
-void MainWindow::parseObject(QXmlStreamReader& xml){
-	cout << "Parsing object" << endl;
-	while(!(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="object")){
-		xml.readNext();
-		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="quad"){
-			parseQuad(xml);
-		}
-	}
-}
-
-void MainWindow::parseQuad(QXmlStreamReader& xml){
-	cout << "Parsing quad" << endl;
-	int vertexCount = 0;
-	while(!(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="quad")){
-		xml.readNext();
-		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="vertex"){
-			cout << "vertex";
-			vertexCount++;
-			QXmlStreamAttributes attributes = xml.attributes();
-			if(attributes.hasAttribute("x")){
-				cout << "\tx=" << qPrintable(attributes.value("x").toString());
-			}
-			if(attributes.hasAttribute("y")){
-				cout << "\ty=" << qPrintable(attributes.value("y").toString());
-			}
-			if(attributes.hasAttribute("z")){
-				cout << "\tz=" << qPrintable(attributes.value("z").toString()) << endl;
-			}
-		}
-	}
-	if(vertexCount!=4){
-		QMessageBox::critical(this,tr("Xml parsing error"),tr("Xml structure error: wrong vertex number."));
 	}
 }
