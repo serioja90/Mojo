@@ -6,6 +6,7 @@
 #include <QTabWidget>
 #include <QTextEdit>
 #include "XmlParser.h"
+#include "GLWidget.h"
 
 class QMenu;
 class QAction;
@@ -26,6 +27,7 @@ class MainWindow : public QMainWindow{
 		QTextEdit* textEdit;
 
 		XmlParser* xmlParser;
+		GLWidget* glWidget;
 
 		void createToolBar();
 	private slots:

@@ -2,8 +2,8 @@
 #define XMLPARSER_H
 
 #include <QByteArray>
+#include <QList>
 #include "Object.h"
-#include "Point.h"
 #include "Exception.h"
 
 class QXmlStreamReader;
@@ -11,13 +11,15 @@ class QXmlStreamReader;
 class XmlParser{
 	public:
 		XmlParser(QByteArray data);
+		QList<Object> getObjects();
 	protected:
-		void parseObject(QXmlStreamReader& xml);
+		QList<Object*>* objects;
+		Object* parseObject(QXmlStreamReader& xml);
 		Point* parsePoint(QXmlStreamReader& xml);
 		Line* parseLine(QXmlStreamReader& xml);
-		void parseTriangle(QXmlStreamReader& xml);
-		void parseQuad(QXmlStreamReader& xml);
-		void parsePolygon(QXmlStreamReader& xml);
+		Triangle* parseTriangle(QXmlStreamReader& xml);
+		Quad* parseQuad(QXmlStreamReader& xml);
+		Polygon* parsePolygon(QXmlStreamReader& xml);
 };
 
 #endif

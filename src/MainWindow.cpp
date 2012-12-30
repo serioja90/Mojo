@@ -8,12 +8,11 @@
 #include <iostream>
 
 #include "MainWindow.h"
-#include "GLWidget.h"
 
 using namespace std;
 
 MainWindow::MainWindow(){
-	GLWidget* glWidget = new GLWidget();
+	glWidget = new GLWidget();
 	tabWidget = new QTabWidget();
 	textEdit = new QTextEdit();
 	tabWidget->addTab(glWidget,QString(tr("View")));
@@ -77,6 +76,7 @@ void MainWindow::openFile(){
 		QByteArray data = file->readAll();
 		QString content(data);
 		xmlParser = new XmlParser(data);
+		glWidget->setObjects(xmlParser->getObjects());
 		QTextDocument document(content);
 		textEdit->setDocument(new QTextDocument(content));
 	}

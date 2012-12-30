@@ -11,3 +11,12 @@ Quad::Quad(Point* a, Point* b, Point* c, Point* d){
 	this->c = c;
 	this->d = d;
 }
+
+QList<Point> Quad::getPoints(){
+	QList<Point>* result = new QList<Point>();
+	result->append(*(this->a));
+	result->append(*(this->b));
+	result->append(*(this->c));
+	result->append(*(this->d));
+	return *(result);
+}

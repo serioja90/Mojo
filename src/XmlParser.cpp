@@ -9,11 +9,11 @@ XmlParser::XmlParser(QByteArray data){
 	cout << "------------------------" << endl;
 	cout << "Parsing xml file" << endl;
 	QXmlStreamReader xml(data);
-	QList<QXmlStreamReader> objects;
+	objects = new QList<Object*>();
 	while(!xml.atEnd() && !xml.hasError()){
 		if(xml.readNextStartElement()){
 			if(xml.name()=="object"){
-				parseObject(xml);
+				objects->append(parseObject(xml));
 			}
 		}
 	}
@@ -21,7 +21,16 @@ XmlParser::XmlParser(QByteArray data){
 	cout << "------------------------" << endl;
 }
 
-void XmlParser::parseObject(QXmlStreamReader& xml){
+QList<Object> XmlParser::getObjects(){
+	QList<Object>* result = new QList<Object>();
+	for(int i=0;i<this->objects->count();i++){
+		Object obj = *(this->objects->at(i));
+		result->append(obj);
+	}
+	return *(result);
+}
+
+Object* XmlParser::parseObject(QXmlStreamReader& xml){
 	Object* obj = new Object();
 	cout << "Parsing object" << endl;
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="object")){
@@ -32,14 +41,15 @@ void XmlParser::parseObject(QXmlStreamReader& xml){
 			}else if(xml.name()=="line"){
 				obj->addLine(parseLine(xml));
 			}else if(xml.name()=="triangle"){
-				parseTriangle(xml);
+				obj->addTriangle(parseTriangle(xml));
 			}else if(xml.name()=="quad"){
-				parseQuad(xml);
+				obj->addQuad(parseQuad(xml));
 			}else if(xml.name()=="polygon"){
-				parsePolygon(xml);
+				obj->addPolygon(parsePolygon(xml));
 			}
 		}
 	}
+	return obj;
 }
 
 Point* XmlParser::parsePoint(QXmlStreamReader& xml){
@@ -71,54 +81,64 @@ Line* XmlParser::parseLine(QXmlStreamReader& xml){
 		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="point"){
 			cout << "\t";
 			if(vertexCount>2){
-				throw WrongXmlLineFormat;
+				throw WrongXmlLineFormatException;
 			}
 			points[vertexCount] = parsePoint(xml);
 			vertexCount++;
 		}
 	}
 	if(vertexCount!=2){
-		throw WrongXmlLineFormat;
+		throw WrongXmlLineFormatException;
 	}
 	line = new Line(points[0],points[1]);
 	return line;
 }
 
-void XmlParser::parseTriangle(QXmlStreamReader& xml){
+Triangle* XmlParser::parseTriangle(QXmlStreamReader& xml){
+	Triangle* triangle;
+	Point* points[3];
 	cout << "\tParsing triangle" << endl;
 	int vertexCount = 0;
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="triangle")){
 		xml.readNext();
 		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="point"){
 			cout << "\t";
-			parsePoint(xml);
+			points[vertexCount] = parsePoint(xml);
 			vertexCount++;
 		}
 	}
+	triangle = new Triangle(points[0],points[1],points[2]);
+	return triangle;
 }
 
-void XmlParser::parseQuad(QXmlStreamReader& xml){
+Quad* XmlParser::parseQuad(QXmlStreamReader& xml){
+	Quad* quad;
+	Point* points[4];
 	cout << "\tParsing quad" << endl;
 	int vertexCount = 0;
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="quad")){
 		xml.readNext();
 		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="point"){
 			cout << "\t";
-			parsePoint(xml);
+			points[vertexCount] = parsePoint(xml);
 			vertexCount++;
 		}
 	}
+	quad = new Quad(points[0],points[1],points[2],points[3]);
+	return quad;
 }
 
-void XmlParser::parsePolygon(QXmlStreamReader& xml){
+Polygon* XmlParser::parsePolygon(QXmlStreamReader& xml){
+	Polygon* polygon = new Polygon();
 	cout << "\tParsing polygon" << endl;
 	int vertexCount = 0;
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="polygon")){
 		xml.readNext();
 		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="point"){
 			cout << "\t";
-			parsePoint(xml);
+			polygon->addPoint(parsePoint(xml));
 			vertexCount++;
 		}
 	}
+	return polygon;
 }
