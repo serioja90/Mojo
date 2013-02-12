@@ -4,7 +4,7 @@ Line::Line(){
 	this->empty = true;
 }
 
-Line::Line(Point* start, Point* end){
+Line::Line(Point start, Point end){
 	this->empty = false;
 	this->start = start;
 	this->end = end;
@@ -12,8 +12,8 @@ Line::Line(Point* start, Point* end){
 
 QList<Point> Line::getPoints(){
 	QList<Point> points;
-	points.append(*(this->start));
-	points.append(*(this->end));
+	points.append(this->start);
+	points.append(this->end);
 	return points;
 }
 
@@ -21,14 +21,14 @@ Point Line::getStartPoint(){
 	if(this->isEmpty()){
 		throw EmptyLineException;
 	}
-	return *(this->start);
+	return this->start;
 }
 
 Point Line::getEndPoint(){
 	if(this->isEmpty()){
 		throw EmptyLineException;
 	}
-	return *(this->end);
+	return this->end;
 }
 
 bool Line::isEmpty(){

@@ -8,15 +8,15 @@
 class Line{
 	public:
 		Line();
-		Line(Point* start, Point* end);
+		Line(Point start, Point end);
 		bool isEmpty();
 		QList<Point> getPoints();
 		Point getStartPoint();
 		Point getEndPoint();
 	protected:
 		bool empty;
-		Point* start;
-		Point* end;
+		Point start;
+		Point end;
 };
 
 #endif

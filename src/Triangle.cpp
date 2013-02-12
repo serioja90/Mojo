@@ -4,7 +4,7 @@ Triangle::Triangle(){
 	this->empty = true;
 }
 
-Triangle::Triangle(Point* a, Point* b, Point* c){
+Triangle::Triangle(Point a, Point b, Point c){
 	this->empty = false;
 	this->a = a;
 	this->b = b;
@@ -20,9 +20,9 @@ QList<Point> Triangle::getPoints(){
 	if(this->isEmpty()){
 		throw EmptyTriangleException;
 	}
-	result->append(*(this->a));
-	result->append(*(this->b));
-	result->append(*(this->c));
+	result->append(this->a);
+	result->append(this->b);
+	result->append(this->c);
 	return *(result);
 }
 

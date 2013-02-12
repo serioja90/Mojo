@@ -11,10 +11,16 @@ using namespace std;
 
 GLWidget::GLWidget(QWidget* parent) : QGLWidget(parent){
 	this->objects = new QList<Object>();
+	rotX = 0.0f;
+	rotY = 0.0f;
+	rotZ = 0.0f;
+	stepX = 0.0f;
+	stepY = 0.0f;
+	stepZ = 0.0f;
 	timer = new QTimer();
 	timer->setInterval(1);
 	timer->setSingleShot(false);
-	connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));
+	connect(timer,SIGNAL(timeout()),this,SLOT(updateGL()));
 }
 
 void GLWidget::setObjects(QList<Object> objects){
@@ -23,16 +29,12 @@ void GLWidget::setObjects(QList<Object> objects){
 	}
 }
 
-void GLWidget::initGL(){
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+void GLWidget::initializeGL(){
 	glShadeModel(GL_SMOOTH);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_MULTISAMPLE);
-	static GLfloat lightPosition[4] = { 0.5, 5.0, 7.0, 1.0 };
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-	glClearColor(0.0f,0.0f,0.0f,0.5f);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glClearDepth(1.0f);
 	timer->start();
 }
@@ -49,11 +51,22 @@ void GLWidget::resizeGL(int width, int height){
 
 void GLWidget::paintGL(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
 	glTranslatef(0.0f,0.0f,-5.0f);
-	for(int i=0;i<this->objects->count();i++){
-		Object obj = this->objects->at(i);
-		this->paintObject(obj);
+	glRotatef(rotX,1.0f,0.0f,0.0f);
+	glRotatef(rotY,0.0f,1.0f,0.0f);
+	glRotatef(rotZ,0.0f,0.0f,1.0f);
+	try{
+		for(int i=0;i<this->objects->count();i++){
+			Object obj = this->objects->at(i);
+			this->paintObject(obj);
+		}
+	}catch(int e){
+		cout << "Exception " << e << " catched!";
 	}
+	rotX += stepX;
+	rotY += stepY;
+	rotZ += stepZ;
 }
 
 void GLWidget::repaint(){
@@ -68,21 +81,14 @@ void GLWidget::paintObject(Object obj){
 	QList<Polygon> polygons = obj.getPolygons();
 	if(!points.empty()){
 		glBegin(GL_POINTS);
-			for(int i=0;i<points.count();i++){
-				Point point = points.at(i);
-				glVertex3f(point.getX(),point.getY(),point.getZ());
-			}
+			this->pointsToVertex(points);
 		glEnd();
 	}
 	if(!lines.empty()){
 		for(int i=0;i<lines.count();i++){
 			glBegin(GL_LINES);
 					Line line = lines.at(i);
-					QList<Point> linePoints = line.getPoints();
-					for(int j=0;j<linePoints.count();j++){
-						Point point = linePoints.at(j);
-						glVertex3f(point.getX(),point.getY(),point.getZ());
-					}
+					this->pointsToVertex(line.getPoints());
 			glEnd();
 		}
 	}
@@ -90,11 +96,7 @@ void GLWidget::paintObject(Object obj){
 		for(int i=0;i<triangles.count();i++){
 			glBegin(GL_TRIANGLES);
 					Triangle triangle = triangles.at(i);
-					QList<Point> trianglePoints = triangle.getPoints();
-					for(int j=0;j<trianglePoints.count();j++){
-						Point point = trianglePoints.at(j);
-						glVertex3f(point.getX(),point.getY(),point.getZ());
-					}
+					this->pointsToVertex(triangle.getPoints());
 			glEnd();
 		}
 	}
@@ -103,11 +105,7 @@ void GLWidget::paintObject(Object obj){
 		for(int i=0;i<quads.count();i++){
 			glBegin(GL_QUADS);
 					Quad quad = quads.at(i);
-					QList<Point> quadPoints = quad.getPoints();
-					for(int j=0;j<quadPoints.count();j++){
-						Point point = quadPoints.at(j);
-						glVertex3f(point.getX(),point.getY(),point.getZ());
-					}
+					this->pointsToVertex(quad.getPoints());
 			glEnd();
 		}
 	}
@@ -116,12 +114,43 @@ void GLWidget::paintObject(Object obj){
 		for(int i=0;i<polygons.count();i++){
 			glBegin(GL_POLYGON);
 					Polygon polygon = polygons.at(i);
-					QList<Point> polygonPoints = polygon.getPoints();
-					for(int j=0;j<polygonPoints.count();j++){
-						Point point = polygonPoints.at(j);
-						glVertex3f(point.getX(),point.getY(),point.getZ());
-					}
+					this->pointsToVertex(polygon.getPoints());
 			glEnd();
 		}
 	}
+}
+
+void GLWidget::pointsToVertex(QList<Point> points){
+	for(int i=0;i<points.count();i++){
+		Point point = points.at(i);
+		Color color = point.getColor();
+		//cout << "Point: " << point.getX() << " " << point.getY() << " " << point.getZ() << endl;
+		//cout << "Color: " << color.getRed() << " " << color.getGreen() << " " << color.getBlue() << " " << color.getAlpha() << endl;
+		glColor4f(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+		glVertex3f(point.getX(),point.getY(),point.getZ());
+	}
+}
+
+void GLWidget::rotateLeft(float degrees){
+	rotY -= degrees;
+}
+
+void GLWidget::rotateRight(float degrees){
+	rotY += degrees;
+}
+
+void GLWidget::rotateUp(float degrees){
+	rotX -= degrees;
+}
+
+void GLWidget::rotateDown(float degrees){
+	rotX += degrees;
+}
+
+void GLWidget::addLeftRotation(float byDegrees){
+	stepY += byDegrees;
+}
+
+void GLWidget::addRightRotation(float byDegrees){
+	stepY -= byDegrees;
 }

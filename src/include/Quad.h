@@ -8,14 +8,11 @@
 class Quad{
 	public:
 		Quad();
-		Quad(Point* a, Point* b, Point* c, Point* d);
+		Quad(Point a, Point b, Point c, Point d);
 		QList<Point> getPoints();
 	protected:
 		bool empty;
-		Point* a;
-		Point* b;
-		Point* c;
-		Point* d;
+		QList<Point> points;
 };
 
 #endif

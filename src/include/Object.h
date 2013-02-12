@@ -11,10 +11,10 @@
 class Object{
 	public:
 		Object();
-		void addPoint(Point* point);
+		void addPoint(Point point);
 		void addLine(Line* line);
 		void addTriangle(Triangle* triangle);
-		void addQuad(Quad* quad);
+		void addQuad(Quad quad);
 		void addPolygon(Polygon* polygon);
 		QList<Point> getPoints();
 		QList<Line> getLines();
@@ -22,10 +22,10 @@ class Object{
 		QList<Quad> getQuads();
 		QList<Polygon> getPolygons();
 	protected:
-		QList<Point*>* points;
+		QList<Point>* points;
 		QList<Line*>* lines;
 		QList<Triangle*>* triangles;
-		QList<Quad*>* quads;
+		QList<Quad>* quads;
 		QList<Polygon*>* polygons;
 };
 

@@ -1,14 +1,14 @@
 #include "Object.h"
 
 Object::Object(){
-	points = new QList<Point*>();
+	points = new QList<Point>();
 	lines = new QList<Line*>();
 	triangles = new QList<Triangle*>();
-	quads = new QList<Quad*>();
+	quads = new QList<Quad>();
 	polygons = new QList<Polygon*>();
 }
 
-void Object::addPoint(Point* point){
+void Object::addPoint(Point point){
 	points->append(point);
 }
 
@@ -20,7 +20,7 @@ void Object::addTriangle(Triangle* triangle){
 	triangles->append(triangle);
 }
 
-void Object::addQuad(Quad* quad){
+void Object::addQuad(Quad quad){
 	quads->append(quad);
 }
 
@@ -31,7 +31,7 @@ void Object::addPolygon(Polygon* polygon){
 QList<Point> Object::getPoints(){
 	QList<Point>* result = new QList<Point>();
 	for(int i=0;i<this->points->count();i++){
-		Point point = *(this->points->at(i));
+		Point point = this->points->at(i);
 		result->append(point);
 	}
 	return *(result);
@@ -58,7 +58,7 @@ QList<Triangle> Object::getTriangles(){
 QList<Quad> Object::getQuads(){
 	QList<Quad>* result = new QList<Quad>();
 	for(int i=0;i<this->quads->count();i++){
-		Quad quad = *(this->quads->at(i));
+		Quad quad = this->quads->at(i);
 		result->append(quad);
 	}
 	return *(result);

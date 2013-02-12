@@ -1,15 +1,21 @@
 #include "Point.h"
 #include "Exception.h"
 
+#include <iostream>
+
+using namespace std;
+
 Point::Point(){
 	empty = true;
 }
 
-Point::Point(double x, double y, double z){
+Point::Point(double xCoord, double yCoord, double zCoord){
 	empty = false;
-	this->x = x;
-	this->y = y;
-	this->z = z;
+	this->x = xCoord;
+	this->y = yCoord;
+	this->z = zCoord;
+	Color* c = new Color();
+	color = *(c);
 }
 
 Point::Point(float x, float y, float z){
@@ -45,4 +51,15 @@ double Point::getZ(){
 		throw EmptyPointException;
 	}
 	return this->z;
+}
+
+void Point::setColor(Color color){
+	this->color = color;
+}
+
+Color Point::getColor(){
+	if(this->isEmpty()){
+		throw EmptyPointException;
+	}
+	return this->color;
 }

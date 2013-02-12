@@ -7,10 +7,10 @@
 class Polygon{
 	public:
 		Polygon();
-		void addPoint(Point* p);
+		void addPoint(Point p);
 		QList<Point> getPoints();
 	protected:
-		QList<Point*>* points;
+		QList<Point>* points;
 };
 
 #endif

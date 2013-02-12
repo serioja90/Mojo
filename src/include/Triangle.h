@@ -8,14 +8,14 @@
 class Triangle{
 	public:
 		Triangle();
-		Triangle(Point* a, Point* b, Point* c);
+		Triangle(Point a, Point b, Point c);
 		bool isEmpty();
 		QList<Point> getPoints();
 	protected:
 		bool empty;
-		Point* a;
-		Point* b;
-		Point* c;
+		Point a;
+		Point b;
+		Point c;
 };
 
 #endif

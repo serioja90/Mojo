@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow{
 		GLWidget* glWidget;
 
 		void createToolBar();
+		void keyPressEvent(QKeyEvent* event);
 	private slots:
 		void createNewFile();
 		void openFile();

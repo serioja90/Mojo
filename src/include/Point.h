@@ -1,6 +1,8 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include "Color.h"
+
 class Point{
 	public:
 		Point();
@@ -11,10 +13,13 @@ class Point{
 		void setX(double xCoord);
 		void setY(double yCoord);
 		void setZ(double zCoord);
+		void setColor(Color color);
 		double getX();
 		double getY();
 		double getZ();
+		Color getColor();
 	protected:
+		Color color;
 		bool empty;
 		double x;
 		double y;

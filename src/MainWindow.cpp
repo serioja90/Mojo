@@ -81,3 +81,20 @@ void MainWindow::openFile(){
 		textEdit->setDocument(new QTextDocument(content));
 	}
 }
+
+void MainWindow::keyPressEvent(QKeyEvent* event){
+	switch(event->key()){
+		case Qt::Key_A:
+			glWidget->rotateLeft(1.0f);
+			break;
+		case Qt::Key_D:
+			glWidget->rotateRight(1.0f);
+			break;
+		case Qt::Key_W:
+			glWidget->rotateUp(1.0f);
+			break;
+		case Qt::Key_S:
+			glWidget->rotateDown(1.0f);
+			break;
+	}
+}

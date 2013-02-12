@@ -1,22 +1,21 @@
 #include "Quad.h"
 
+#include <iostream>
+
+using namespace std;
+
 Quad::Quad(){
 	this->empty = true;
 }
 
-Quad::Quad(Point* a, Point* b, Point* c, Point* d){
-	this->empty = false;
-	this->a = a;
-	this->b = b;
-	this->c = c;
-	this->d = d;
+Quad::Quad(Point pointA, Point pointB, Point pointC, Point pointD){
+	empty = false;
+	points.append(pointA);
+	points.append(pointB);
+	points.append(pointC);
+	points.append(pointD);
 }
 
 QList<Point> Quad::getPoints(){
-	QList<Point>* result = new QList<Point>();
-	result->append(*(this->a));
-	result->append(*(this->b));
-	result->append(*(this->c));
-	result->append(*(this->d));
-	return *(result);
+	return points;
 }

@@ -21,6 +21,7 @@ LIBS += -lGL -lGLU
 HEADERS +=  src/include/MainWindow.h\
 			src/include/GLWidget.h\
 			src/include/XmlParser.h\
+			src/include/Color.h\
 			src/include/Point.h\
 			src/include/Exception.h\
 			src/include/Line.h\
@@ -32,6 +33,7 @@ SOURCES +=  src/main.cpp\
 			src/MainWindow.cpp\
 			src/GLWidget.cpp\
 			src/XmlParser.cpp\
+			src/Color.cpp\
 			src/Point.cpp\
 			src/Line.cpp\
 			src/Triangle.cpp\
