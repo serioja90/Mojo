@@ -34,21 +34,21 @@ bool Point::isEmpty(){
 
 double Point::getX(){
 	if(this->isEmpty()){
-		throw EmptyPointException;
+		throw Exception::EmptyPointException;
 	}
 	return this->x;
 }
 
 double Point::getY(){
 	if(this->isEmpty()){
-		throw EmptyPointException;
+		throw Exception::EmptyPointException;
 	}
 	return this->y;
 }
 
 double Point::getZ(){
 	if(this->isEmpty()){
-		throw EmptyPointException;
+		throw Exception::EmptyPointException;
 	}
 	return this->z;
 }
@@ -59,7 +59,7 @@ void Point::setColor(Color color){
 
 Color Point::getColor(){
 	if(this->isEmpty()){
-		throw EmptyPointException;
+		throw Exception::EmptyPointException;
 	}
 	return this->color;
 }

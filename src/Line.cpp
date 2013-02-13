@@ -19,14 +19,14 @@ QList<Point> Line::getPoints(){
 
 Point Line::getStartPoint(){
 	if(this->isEmpty()){
-		throw EmptyLineException;
+		throw Exception::EmptyLineException;
 	}
 	return this->start;
 }
 
 Point Line::getEndPoint(){
 	if(this->isEmpty()){
-		throw EmptyLineException;
+		throw Exception::EmptyLineException;
 	}
 	return this->end;
 }

@@ -1,16 +1,30 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
-#define EmptyPointException 0
-#define EmptyLineException 1
-#define EmptyTriangleException 2
-#define EmptyQuadException 3
-#define EmptyPolygonException 4
+#include <QString>
 
-#define WrongXmlPointFormatException 100
-#define WrongXmlLineFormatException 101
-#define WrongXmlTriangleFormatException 102
-#define WrongXmlQuadFormatException 103
-#define WrongXmlPolygonFormatException 104
+class QString;
+
+class Exception{
+	public:
+		Exception(int code, const QString& name, const QString& description);
+		int getCode();
+		QString getName();
+		QString getDescription();
+		static const Exception InvalidXmlPointFormatException;
+		static const Exception InvalidXmlLineFormatException;
+		static const Exception InvalidXmlTriangleFormatException;
+		static const Exception InvalidXmlQuadFormatException;
+		static const Exception InvalidXmlPolygonFormatException;
+		static const Exception EmptyPointException;
+		static const Exception EmptyLineException;
+		static const Exception EmptyTriangleException;
+		static const Exception EmptyQuadException;
+		static const Exception EmptyPolygonException;
+	private:
+		int code;
+		QString name;
+		QString description;
+};
 
 #endif

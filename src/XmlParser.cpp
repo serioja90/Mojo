@@ -35,18 +35,22 @@ Object XmlParser::parseObject(QXmlStreamReader& xml){
 	cout << "Parsing object" << endl;
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="object")){
 		xml.readNext();
-		if(xml.tokenType()==QXmlStreamReader::StartElement){
-			if(xml.name()=="point"){
-				obj->addPoint(parsePoint(xml));
-			}else if(xml.name()=="line"){
-				obj->addLine(parseLine(xml));
-			}else if(xml.name()=="triangle"){
-				obj->addTriangle(parseTriangle(xml));
-			}else if(xml.name()=="quad"){
-				obj->addQuad(parseQuad(xml));
-			}else if(xml.name()=="polygon"){
-				obj->addPolygon(parsePolygon(xml));
+		try{
+			if(xml.tokenType()==QXmlStreamReader::StartElement){
+				if(xml.name()=="point"){
+					obj->addPoint(parsePoint(xml));
+				}else if(xml.name()=="line"){
+					obj->addLine(parseLine(xml));
+				}else if(xml.name()=="triangle"){
+					obj->addTriangle(parseTriangle(xml));
+				}else if(xml.name()=="quad"){
+					obj->addQuad(parseQuad(xml));
+				}else if(xml.name()=="polygon"){
+					obj->addPolygon(parsePolygon(xml));
+				}
 			}
+		}catch(Exception e){
+			qDebug() << "Thrown exception: " << e.getCode() << "\t" << e.getName() << "\n" << e.getDescription();
 		}
 	}
 	return *(obj);
@@ -59,23 +63,27 @@ Point XmlParser::parsePoint(QXmlStreamReader& xml){
 		QXmlStreamAttributes attr = xml.attributes();
 		if(attr.hasAttribute("x") && attr.hasAttribute("y") && attr.hasAttribute("z")){
 			double x,y,z;
-			cout << "\tx=" << qPrintable(attr.value("x").toString())
-				 << "\ty=" << qPrintable(attr.value("y").toString())
-				 << "\tz=" << qPrintable(attr.value("z").toString()) << endl;
 			x = attr.value("x").toString().toDouble();
 			y = attr.value("y").toString().toDouble();
 			z = attr.value("z").toString().toDouble();
 			p = new Point(x,y,z);
+		}else{
+			throw Exception::InvalidXmlPointFormatException;
 		}
-	}
-	if(xml.tokenType()==QXmlStreamReader::StartElement && xml.tokenType()!=QXmlStreamReader::EndElement){
+		if(attr.hasAttribute("color")){
+			Color col = getColor(attr.value("color").toString());
+			p->setColor(col);
+		}
 		while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="point")){
 			xml.readNext();
-			if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="color"){
-				p->setColor(parseColor(xml));
+			if(xml.name()!="point"){
+				throw Exception::InvalidXmlPointFormatException;
 			}
 		}
+	}else{
+		throw Exception::InvalidXmlPointFormatException;
 	}
+	cout << "\tx=" << p->getX() << "\ty=" << p->getY() << "\tz=" << p->getZ() << endl;
 	return *(p);
 }
 
@@ -100,6 +108,31 @@ Color XmlParser::parseColor(QXmlStreamReader& xml){
 	return *(color);
 }
 
+Color XmlParser::getColor(const QString& col){
+	QString red = QString("FF"), green = QString("FF"), blue = QString("FF"), alpha = QString("FF");
+	int r,g,b,a;
+	bool ok;
+	if(col.length()==3){
+		red = QString(col.at(0)) + QString(col.at(0));
+		green = QString(col.at(1)) + QString(col.at(1));
+		blue = QString(col.at(2)) + QString(col.at(2));
+	}else if(col.length()==6){
+		red = QString(col.at(0)) + QString(col.at(1));
+		green = QString(col.at(2)) + QString(col.at(3));
+		blue = QString(col.at(4)) + QString(col.at(5));
+	}else if(col.length()==8){
+		red = QString(col.at(0)) + QString(col.at(1));
+		green = QString(col.at(2)) + QString(col.at(3));
+		blue = QString(col.at(4)) + QString(col.at(5));
+		alpha = QString(col.at(6)) + QString(col.at(7));
+	}
+	r = red.toInt(&ok,16);
+	g = green.toInt(&ok,16);
+	b = blue.toInt(&ok,16);
+	a = alpha.toInt(&ok,16);
+	return Color(r,g,b,a);
+}
+
 Line* XmlParser::parseLine(QXmlStreamReader& xml){
 	Line* line;
 	Point points[2];
@@ -110,14 +143,14 @@ Line* XmlParser::parseLine(QXmlStreamReader& xml){
 		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="point"){
 			cout << "\t";
 			if(vertexCount>2){
-				throw WrongXmlLineFormatException;
+				throw Exception::InvalidXmlLineFormatException;
 			}
 			points[vertexCount] = parsePoint(xml);
 			vertexCount++;
 		}
 	}
 	if(vertexCount!=2){
-		throw WrongXmlLineFormatException;
+		throw Exception::InvalidXmlLineFormatException;
 	}
 	line = new Line(points[0],points[1]);
 	return line;
@@ -136,6 +169,9 @@ Triangle* XmlParser::parseTriangle(QXmlStreamReader& xml){
 			vertexCount++;
 		}
 	}
+	if(vertexCount!=3){
+		throw Exception::InvalidXmlTriangleFormatException;
+	}
 	triangle = new Triangle(points[0],points[1],points[2]);
 	return triangle;
 }
@@ -152,6 +188,9 @@ Quad XmlParser::parseQuad(QXmlStreamReader& xml){
 			points[vertexCount] = parsePoint(xml);
 			vertexCount++;
 		}
+	}
+	if(vertexCount!=4){
+		throw Exception::InvalidXmlQuadFormatException;
 	}
 	quad = new Quad(points[0],points[1],points[2],points[3]);
 	return *(quad);

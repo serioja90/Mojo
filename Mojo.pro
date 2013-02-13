@@ -39,6 +39,7 @@ SOURCES +=  src/main.cpp\
 			src/Triangle.cpp\
 			src/Quad.cpp\
 			src/Polygon.cpp\
-			src/Object.cpp
+			src/Object.cpp\
+			src/Exception.cpp
 
 RESOURCES += resources/icons.qrc

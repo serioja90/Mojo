@@ -22,6 +22,7 @@ class XmlParser{
 		Quad parseQuad(QXmlStreamReader& xml);
 		Polygon* parsePolygon(QXmlStreamReader& xml);
 		Color parseColor(QXmlStreamReader& xml);
+		Color getColor(const QString&);
 };
 
 #endif
