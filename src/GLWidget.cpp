@@ -124,6 +124,9 @@ void GLWidget::pointsToVertex(QList<Point> points){
 	for(int i=0;i<points.count();i++){
 		Point point = points.at(i);
 		Color color = point.getColor();
+		if(color.isEmpty()){
+			color = Color(255,255,255,255);
+		}
 		//cout << "Point: " << point.getX() << " " << point.getY() << " " << point.getZ() << endl;
 		//cout << "Color: " << color.getRed() << " " << color.getGreen() << " " << color.getBlue() << " " << color.getAlpha() << endl;
 		glColor4f(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());

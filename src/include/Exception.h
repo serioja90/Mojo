@@ -21,6 +21,7 @@ class Exception{
 		static const Exception EmptyTriangleException;
 		static const Exception EmptyQuadException;
 		static const Exception EmptyPolygonException;
+		static const Exception EmptyColorException;
 	private:
 		int code;
 		QString name;

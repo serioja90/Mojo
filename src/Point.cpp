@@ -9,23 +9,28 @@ Point::Point(){
 	empty = true;
 }
 
-Point::Point(double xCoord, double yCoord, double zCoord){
+Point::Point(double x, double y, double z){
 	empty = false;
-	this->x = xCoord;
-	this->y = yCoord;
-	this->z = zCoord;
-	Color* c = new Color();
-	color = *(c);
+	this->x = x;
+	this->y = y;
+	this->z = z;
+	color = Color();
 }
 
 Point::Point(float x, float y, float z){
 	empty = false;
-	Point((double)x,(double)y,(double)z);
+	this->x = (double)x;
+	this->y = (double)y;
+	this->z = (double)z;
+	color = Color();
 }
 
 Point::Point(int x, int y, int z){
 	empty = false;
-	Point((double)x,(double)y,(double)z);
+	this->x = (double)x;
+	this->y = (double)y;
+	this->z = (double)z;
+	color = Color();
 }
 
 bool Point::isEmpty(){

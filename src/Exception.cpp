@@ -77,3 +77,9 @@ const Exception Exception::EmptyPolygonException = Exception(
 	"EmptyPolygonException",
 	"The polygon is empty and cannot provide any information"
 );
+
+const Exception Exception::EmptyColorException = Exception(
+	10,
+	"EmptyColorException",
+	"The color il empty and cannot provide any information"
+);

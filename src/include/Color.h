@@ -12,11 +12,13 @@ class Color{
 		float getGreen();
 		float getBlue();
 		float getAlpha();
+		bool isEmpty();
 	protected:
 		float red;
 		float green;
 		float blue;
 		float alpha;
+		bool empty;
 };
 
 #endif

@@ -136,6 +136,11 @@ Color XmlParser::getColor(const QString& col){
 Line* XmlParser::parseLine(QXmlStreamReader& xml){
 	Line* line;
 	Point points[2];
+	Color color = Color();
+	QXmlStreamAttributes attr = xml.attributes();
+	if(attr.hasAttribute("color")){
+		color = getColor(attr.value("color").toString());
+	}
 	cout << "\tParsing line" << endl;
 	int vertexCount = 0;
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="line")){
@@ -146,6 +151,9 @@ Line* XmlParser::parseLine(QXmlStreamReader& xml){
 				throw Exception::InvalidXmlLineFormatException;
 			}
 			points[vertexCount] = parsePoint(xml);
+			if(points[vertexCount].getColor().isEmpty() && !color.isEmpty()){
+				points[vertexCount].setColor(color);
+			}
 			vertexCount++;
 		}
 	}
@@ -159,6 +167,11 @@ Line* XmlParser::parseLine(QXmlStreamReader& xml){
 Triangle* XmlParser::parseTriangle(QXmlStreamReader& xml){
 	Triangle* triangle;
 	Point points[3];
+	Color color = Color();
+	QXmlStreamAttributes attr = xml.attributes();
+	if(attr.hasAttribute("color")){
+		color = getColor(attr.value("color").toString());
+	}
 	cout << "\tParsing triangle" << endl;
 	int vertexCount = 0;
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="triangle")){
@@ -166,6 +179,9 @@ Triangle* XmlParser::parseTriangle(QXmlStreamReader& xml){
 		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="point"){
 			cout << "\t";
 			points[vertexCount] = parsePoint(xml);
+			if(points[vertexCount].getColor().isEmpty() && !color.isEmpty()){
+				points[vertexCount].setColor(color);
+			}
 			vertexCount++;
 		}
 	}
@@ -177,34 +193,51 @@ Triangle* XmlParser::parseTriangle(QXmlStreamReader& xml){
 }
 
 Quad XmlParser::parseQuad(QXmlStreamReader& xml){
-	Quad* quad;
+	Quad quad;
+	Color color = Color();
 	Point points[4];
 	cout << "\tParsing quad" << endl;
 	int vertexCount = 0;
+	QXmlStreamAttributes attr = xml.attributes();
+	if(attr.hasAttribute("color")){
+		color = getColor(attr.value("color").toString());
+	}
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="quad")){
 		xml.readNext();
 		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="point"){
 			cout << "\t";
 			points[vertexCount] = parsePoint(xml);
+			if(points[vertexCount].getColor().isEmpty() && !color.isEmpty()){
+				points[vertexCount].setColor(color);
+			}
 			vertexCount++;
 		}
 	}
 	if(vertexCount!=4){
 		throw Exception::InvalidXmlQuadFormatException;
 	}
-	quad = new Quad(points[0],points[1],points[2],points[3]);
-	return *(quad);
+	quad = Quad(points[0],points[1],points[2],points[3]);
+	return quad;
 }
 
 Polygon* XmlParser::parsePolygon(QXmlStreamReader& xml){
 	Polygon* polygon = new Polygon();
+	Color color = Color();
+	QXmlStreamAttributes attr = xml.attributes();
+	if(attr.hasAttribute("color")){
+		color = getColor(attr.value("color").toString());
+	}
 	cout << "\tParsing polygon" << endl;
 	int vertexCount = 0;
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="polygon")){
 		xml.readNext();
 		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="point"){
 			cout << "\t";
-			polygon->addPoint(parsePoint(xml));
+			Point point = parsePoint(xml);
+			if(point.getColor().isEmpty() && !color.isEmpty()){
+				point.setColor(color);
+			}
+			polygon->addPoint(point);
 			vertexCount++;
 		}
 	}
