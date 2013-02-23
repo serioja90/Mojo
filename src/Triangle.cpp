@@ -1,4 +1,6 @@
 #include "Triangle.h"
+#include <QtGui>
+#include <GL/gl.h>
 
 Triangle::Triangle(){
 	this->empty = true;
@@ -6,9 +8,31 @@ Triangle::Triangle(){
 
 Triangle::Triangle(Point a, Point b, Point c){
 	this->empty = false;
-	this->a = a;
-	this->b = b;
-	this->c = c;
+	this->points.append(a);
+	this->points.append(b);
+	this->points.append(c);
+	this->pointsOrder = GL_CCW;
+}
+
+Triangle::Triangle(Point a, Point b, Point c, int order){
+	this->empty = false;
+	this->points.append(a);
+	this->points.append(b);
+	this->points.append(c);
+	this->pointsOrder = GL_CCW;
+	this->setPointsOrder(order);
+}
+
+void Triangle::setPointsOrder(int order){
+	if(order!=GL_CCW && order!=GL_CW){
+		throw Exception::InvalidPointsOrderException;
+	}
+	if(order!=this->pointsOrder){
+		for(int i=0;i<points.length()/2;i++){
+			points.swap(i,points.length()-i-1);
+		}
+	}
+	this->pointsOrder = order;
 }
 
 bool Triangle::isEmpty(){
@@ -16,13 +40,19 @@ bool Triangle::isEmpty(){
 }
 
 QList<Point> Triangle::getPoints(){
-	QList<Point>* result = new QList<Point>();
 	if(this->isEmpty()){
-		throw EmptyTriangleException;
+		throw Exception::EmptyTriangleException;
 	}
-	result->append(this->a);
-	result->append(this->b);
-	result->append(this->c);
-	return *(result);
+	return this->points;
 }
+
+int Triangle::getPointsOrder(){
+	if(this->isEmpty()){
+		throw Exception::EmptyTriangleException;
+	}
+	return this->pointsOrder;
+}
+
+
+
 

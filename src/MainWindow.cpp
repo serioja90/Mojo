@@ -85,16 +85,16 @@ void MainWindow::openFile(){
 void MainWindow::keyPressEvent(QKeyEvent* event){
 	switch(event->key()){
 		case Qt::Key_A:
-			glWidget->rotateLeft(1.0f);
+			glWidget->rotateLeft(0.05f);
 			break;
 		case Qt::Key_D:
-			glWidget->rotateRight(1.0f);
+			glWidget->rotateRight(0.05f);
 			break;
 		case Qt::Key_W:
-			glWidget->rotateUp(1.0f);
+			glWidget->rotateUp(0.05f);
 			break;
 		case Qt::Key_S:
-			glWidget->rotateDown(1.0f);
+			glWidget->rotateDown(0.05f);
 			break;
 	}
 }

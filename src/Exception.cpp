@@ -83,3 +83,9 @@ const Exception Exception::EmptyColorException = Exception(
 	"EmptyColorException",
 	"The color il empty and cannot provide any information"
 );
+
+const Exception Exception::InvalidPointsOrderException = Exception(
+	11,
+	"InvalidPointsOrderException",
+	"Invalid value for points order attribute"
+);

@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <GL/gl.h>
 #include <iostream>
 
 #include "XmlParser.h"
@@ -76,9 +77,6 @@ Point XmlParser::parsePoint(QXmlStreamReader& xml){
 		}
 		while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="point")){
 			xml.readNext();
-			if(xml.name()!="point"){
-				throw Exception::InvalidXmlPointFormatException;
-			}
 		}
 	}else{
 		throw Exception::InvalidXmlPointFormatException;
@@ -166,11 +164,17 @@ Line* XmlParser::parseLine(QXmlStreamReader& xml){
 
 Triangle* XmlParser::parseTriangle(QXmlStreamReader& xml){
 	Triangle* triangle;
+	int order = GL_CCW;
 	Point points[3];
 	Color color = Color();
 	QXmlStreamAttributes attr = xml.attributes();
 	if(attr.hasAttribute("color")){
 		color = getColor(attr.value("color").toString());
+	}
+	if(attr.hasAttribute("order")){
+		if(attr.value("order").toString().toLower()=="cw"){
+			order = GL_CW;
+		}
 	}
 	cout << "\tParsing triangle" << endl;
 	int vertexCount = 0;
@@ -188,12 +192,13 @@ Triangle* XmlParser::parseTriangle(QXmlStreamReader& xml){
 	if(vertexCount!=3){
 		throw Exception::InvalidXmlTriangleFormatException;
 	}
-	triangle = new Triangle(points[0],points[1],points[2]);
+	triangle = new Triangle(points[0],points[1],points[2],order);
 	return triangle;
 }
 
 Quad XmlParser::parseQuad(QXmlStreamReader& xml){
 	Quad quad;
+	int order = GL_CCW;
 	Color color = Color();
 	Point points[4];
 	cout << "\tParsing quad" << endl;
@@ -201,6 +206,11 @@ Quad XmlParser::parseQuad(QXmlStreamReader& xml){
 	QXmlStreamAttributes attr = xml.attributes();
 	if(attr.hasAttribute("color")){
 		color = getColor(attr.value("color").toString());
+	}
+	if(attr.hasAttribute("order")){
+		if(attr.value("order").toString().toLower()=="cw"){
+			order = GL_CW;
+		}
 	}
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="quad")){
 		xml.readNext();
@@ -216,7 +226,7 @@ Quad XmlParser::parseQuad(QXmlStreamReader& xml){
 	if(vertexCount!=4){
 		throw Exception::InvalidXmlQuadFormatException;
 	}
-	quad = Quad(points[0],points[1],points[2],points[3]);
+	quad = Quad(points[0],points[1],points[2],points[3],order);
 	return quad;
 }
 

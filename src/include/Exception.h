@@ -22,6 +22,7 @@ class Exception{
 		static const Exception EmptyQuadException;
 		static const Exception EmptyPolygonException;
 		static const Exception EmptyColorException;
+		static const Exception InvalidPointsOrderException;
 	private:
 		int code;
 		QString name;

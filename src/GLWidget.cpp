@@ -6,6 +6,9 @@
 #include "GLWidget.h"
 
 #include <iostream>
+#include <math.h>
+
+#define PI 3.14159265
 
 using namespace std;
 
@@ -24,6 +27,7 @@ GLWidget::GLWidget(QWidget* parent) : QGLWidget(parent){
 }
 
 void GLWidget::setObjects(QList<Object> objects){
+	this->objects = new QList<Object>();
 	for(int i=0;i<objects.count();i++){
 		this->objects->append(objects.at(i));
 	}
@@ -36,6 +40,25 @@ void GLWidget::initializeGL(){
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glClearDepth(1.0f);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	// GLfloat ambientLight[] = {0.01f,0.01f,0.01f,1.0f};
+	// GLfloat diffuseLight[] = {0.7f,0.7f,0.7f,1.0f};
+	// GLfloat lightPos[] = {-50.0f,50.0f,100.0f,1.0f};
+	// GLfloat specilar[] = {1.0f,1.0f,1.0f,1.0f};
+	// GLfloat specref[] = {1.0f,1.0f,1.0f,1.0f};
+	// //glLightModelfv(GL_LIGHT_MODEL_AMBIENT,ambientLight);
+	// glLightfv(GL_LIGHT0,GL_AMBIENT,ambientLight);
+	// glLightfv(GL_LIGHT0,GL_DIFFUSE,diffuseLight);
+	// glLightfv(GL_LIGHT0,GL_SPECULAR,specilar);
+	// glLightfv(GL_LIGHT0,GL_POSITION,lightPos);
+	// glMaterialfv(GL_FRONT,GL_SPECULAR,specref);
+
+	glEnable(GL_LIGHT0);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
 	timer->start();
 }
 
@@ -53,14 +76,18 @@ void GLWidget::paintGL(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	glTranslatef(0.0f,0.0f,-5.0f);
-	glRotatef(rotX,1.0f,0.0f,0.0f);
-	glRotatef(rotY,0.0f,1.0f,0.0f);
-	glRotatef(rotZ,0.0f,0.0f,1.0f);
+	// glRotatef(rotX,1.0f,0.0f,0.0f);
+	// 	glRotatef(rotY,0.0f,1.0f,0.0f);
+	// 	glRotatef(rotZ,0.0f,0.0f,1.0f);
+	gluLookAt(sin(rotY)*7.0f,sin(rotX)*7.0f,cos(rotY)*cos(rotX)*7.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f);
 	try{
+		glPushMatrix();
+		glMateriali(GL_FRONT,GL_SHININESS,128);
 		for(int i=0;i<this->objects->count();i++){
 			Object obj = this->objects->at(i);
 			this->paintObject(obj);
 		}
+		glPopMatrix();
 	}catch(int e){
 		cout << "Exception " << e << " catched!";
 	}
