@@ -9,7 +9,15 @@ Point::Point(){
 	empty = true;
 }
 
-Point::Point(double x, double y, double z){
+Point::Point(GLdouble x, GLdouble y, GLdouble z){
+	empty = false;
+	this->x = (GLfloat)x;
+	this->y = (GLfloat)y;
+	this->z = (GLfloat)z;
+	color = Color();
+}
+
+Point::Point(GLfloat x, GLfloat y, GLfloat z){
 	empty = false;
 	this->x = x;
 	this->y = y;
@@ -17,19 +25,11 @@ Point::Point(double x, double y, double z){
 	color = Color();
 }
 
-Point::Point(float x, float y, float z){
+Point::Point(GLint x, GLint y, GLint z){
 	empty = false;
-	this->x = (double)x;
-	this->y = (double)y;
-	this->z = (double)z;
-	color = Color();
-}
-
-Point::Point(int x, int y, int z){
-	empty = false;
-	this->x = (double)x;
-	this->y = (double)y;
-	this->z = (double)z;
+	this->x = (GLfloat)x;
+	this->y = (GLfloat)y;
+	this->z = (GLfloat)z;
 	color = Color();
 }
 
@@ -37,21 +37,21 @@ bool Point::isEmpty(){
 	return this->empty;
 }
 
-double Point::getX(){
+GLfloat Point::getX(){
 	if(this->isEmpty()){
 		throw Exception::EmptyPointException;
 	}
 	return this->x;
 }
 
-double Point::getY(){
+GLfloat Point::getY(){
 	if(this->isEmpty()){
 		throw Exception::EmptyPointException;
 	}
 	return this->y;
 }
 
-double Point::getZ(){
+GLfloat Point::getZ(){
 	if(this->isEmpty()){
 		throw Exception::EmptyPointException;
 	}
@@ -67,4 +67,16 @@ Color Point::getColor(){
 		throw Exception::EmptyPointException;
 	}
 	return this->color;
+}
+
+GLfloat* Point::toArray(Point p){
+	GLfloat* result;
+	if(p.isEmpty()){
+		throw Exception::EmptyPointException;
+	}
+	result = (GLfloat*)calloc(3,sizeof(GLfloat));
+	result[0] = p.getX();
+	result[1] = p.getY();
+	result[2] = p.getZ();
+	return result;
 }

@@ -1,29 +1,32 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include <GL/gl.h>
+
 #include "Color.h"
 
 class Point{
 	public:
 		Point();
-		Point(double xCoord, double yCoord, double zCoord);
-		Point(float xCoord, float yCoord, float zCoord);
-		Point(int xCoord, int yCoord, int zCoord);
+		Point(GLdouble xCoord, GLdouble yCoord, GLdouble zCoord);
+		Point(GLfloat xCoord, GLfloat yCoord, GLfloat zCoord);
+		Point(GLint xCoord, GLint yCoord, GLint zCoord);
 		bool isEmpty();
-		void setX(double xCoord);
-		void setY(double yCoord);
-		void setZ(double zCoord);
+		// void setX(GLfloat xCoord);
+		// void setY(GLfloat yCoord);
+		// void setZ(GLfloat zCoord);
 		void setColor(Color color);
-		double getX();
-		double getY();
-		double getZ();
+		GLfloat getX();
+		GLfloat getY();
+		GLfloat getZ();
 		Color getColor();
+		static GLfloat* toArray(Point p);
 	protected:
 		Color color;
 		bool empty;
-		double x;
-		double y;
-		double z;
+		GLfloat x;
+		GLfloat y;
+		GLfloat z;
 };
 
 #endif

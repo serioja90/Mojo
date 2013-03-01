@@ -17,6 +17,7 @@ class GLWidget : public QGLWidget{
 		void rotateDown(float degrees);
 		void addLeftRotation(float byDegrees);
 		void addRightRotation(float byDegrees);
+
 	protected:
 		QList<Object>* objects;
 		QTimer* timer;
@@ -33,6 +34,9 @@ class GLWidget : public QGLWidget{
 		void paintGL();
 		void paintObject(Object obj);
 		void pointsToVertex(QList<Point> points);
+
+	private:
+		GLfloat* getNormal(QList<Point> points);
 
 	private slots:
 		void repaint();
