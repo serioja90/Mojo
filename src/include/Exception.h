@@ -23,6 +23,16 @@ class Exception{
 		static const Exception EmptyPolygonException;
 		static const Exception EmptyColorException;
 		static const Exception InvalidPointsOrderException;
+		static const Exception InvalidFaceException;
+		static const Exception InvalidParameterException;
+		static const Exception EmptyMaterialPropertyException;
+		static const Exception WrongTypeException;
+		static const Exception EmptyMaterialException;
+		static const Exception EmptyMaterialParameterException;
+		static const Exception EmptyAmbientParameterException;
+		static const Exception EmptyDiffuseParameterException;
+		static const Exception EmptySpecularParameterException;
+		static const Exception EmptyShininessParameterException;
 	private:
 		int code;
 		QString name;

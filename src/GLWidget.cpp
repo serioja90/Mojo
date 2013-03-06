@@ -160,8 +160,24 @@ void GLWidget::paintObject(Object obj){
 	}
 	if(!triangles.empty()){
 		for(int i=0;i<triangles.count();i++){
+			Triangle triangle = triangles.at(i);
+			glPushMatrix();
+				if(!triangle.getMaterial().isEmpty()){
+					Material material = triangle.getMaterial();
+					QList<MaterialProperty> properties = material.getProperties();
+					for(int j=0;j<properties.count();j++){
+						MaterialProperty prop = properties.at(j);
+						if(!prop.isEmpty()){
+							if(prop.hasVector()){
+								glMaterialfv(prop.getFace(),prop.getParameter(),prop.getFloatVectorValue());
+							}else{
+								glMaterialf(prop.getFace(),prop.getParameter(),prop.getValue());
+							}
+						}
+					}
+				}
+			glPopMatrix();
 			glBegin(GL_TRIANGLES);
-					Triangle triangle = triangles.at(i);
 					glNormal3fv(getNormal(triangle.getPoints()));
 					this->pointsToVertex(triangle.getPoints());
 			glEnd();

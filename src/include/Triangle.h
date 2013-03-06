@@ -4,6 +4,7 @@
 #include <QList>
 #include "Point.h"
 #include "Exception.h"
+#include "Material.h"
 
 class Triangle{
 	public:
@@ -14,10 +15,12 @@ class Triangle{
 		bool isEmpty();
 		QList<Point> getPoints();
 		int getPointsOrder();
+		Material getMaterial();
 	protected:
 		bool empty;
 		int pointsOrder;
 		QList<Point> points;
+		Material material;
 		Point a;
 		Point b;
 		Point c;

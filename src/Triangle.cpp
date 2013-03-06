@@ -53,6 +53,9 @@ int Triangle::getPointsOrder(){
 	return this->pointsOrder;
 }
 
+Material Triangle::getMaterial(){
+	return this->material;
+}
 
 
 
