@@ -89,3 +89,63 @@ const Exception Exception::InvalidPointsOrderException = Exception(
 	"InvalidPointsOrderException",
 	"Invalid value for points order attribute"
 );
+
+const Exception Exception::InvalidFaceException = Exception(
+	12,
+	"InvalidFaceException",
+	"Invalid value for face attribute"
+);
+
+const Exception Exception::InvalidParameterException = Exception(
+	13,
+	"InvalidParameterException",
+	"Invalid value for parameter type attribute"
+);
+
+const Exception Exception::EmptyMaterialPropertyException = Exception(
+	14,
+	"EmptyMaterialPropertyException",
+	"Empty material property cannot provide any information"
+);
+
+const Exception Exception::WrongTypeException = Exception(
+	15,
+	"WrongTypeException",
+	"The value passed as parameter has a wrong type"
+);
+
+const Exception Exception::EmptyMaterialException = Exception(
+	16,
+	"EmptyMaterialException",
+	"Empty material cannot provide any information"
+);
+
+const Exception Exception::EmptyMaterialParameterException = Exception(
+	17,
+	"EmptyMaterialParameterException",
+	"Cannot set or get infromation for empty material parameter"
+);
+
+const Exception Exception::EmptyAmbientParameterException = Exception(
+	18,
+	"EmptyAmbientParameterException",
+	"Cannot set or get information for empty ambient parameter"
+);
+
+const Exception Exception::EmptyDiffuseParameterException = Exception(
+	19,
+	"EmptyDiffuseParameterException",
+	"Cannot set or get information for empty diffuse parameter"
+);
+
+const Exception Exception::EmptySpecularParameterException = Exception(
+	20,
+	"EmptySpecularParameterException",
+	"Cannot set or get information for empty specular parameter"
+);
+
+const Exception Exception::EmptyShininessParameterException = Exception(
+	21,
+	"EmptyShininessParameterException",
+	"Cannot set ot get information for empty shininess parameter"
+);
