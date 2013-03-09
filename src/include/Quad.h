@@ -4,6 +4,8 @@
 #include <QList>
 #include "Point.h"
 #include "Exception.h"
+#include "Material.h"
+#include "MaterialParameter.h"
 
 class Quad{
 	public:
@@ -14,9 +16,12 @@ class Quad{
 		QList<Point> getPoints();
 		bool isEmpty();
 		int getPointsOrder();
+		QList<const MaterialParameter*> getMaterialParameters();
+		void setMaterialParameter(MaterialParameter &param);
 	protected:
 		bool empty;
 		QList<Point> points;
+		Material material;
 		int pointsOrder;
 };
 

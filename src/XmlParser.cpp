@@ -259,6 +259,7 @@ Quad XmlParser::parseQuad(QXmlStreamReader& xml){
 	int order = GL_CCW;
 	Color color = Color();
 	Point points[4];
+	QList<MaterialParameter*> material_parameters;
 	cout << "\tParsing quad" << endl;
 	int vertexCount = 0;
 	QXmlStreamAttributes attr = xml.attributes();
@@ -279,18 +280,24 @@ Quad XmlParser::parseQuad(QXmlStreamReader& xml){
 				points[vertexCount].setColor(color);
 			}
 			vertexCount++;
+		}else if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="material"){
+			material_parameters = getMaterialParameters(xml);
 		}
 	}
 	if(vertexCount!=4){
 		throw Exception::InvalidXmlQuadFormatException;
 	}
 	quad = Quad(points[0],points[1],points[2],points[3],order);
+	for(int i=0;i<material_parameters.count();i++){
+		quad.setMaterialParameter(*(material_parameters.at(i)));
+	}
 	return quad;
 }
 
 Polygon* XmlParser::parsePolygon(QXmlStreamReader& xml){
 	Polygon* polygon = new Polygon();
 	Color color = Color();
+	QList<MaterialParameter*> material_parameters;
 	QXmlStreamAttributes attr = xml.attributes();
 	if(attr.hasAttribute("color")){
 		color = getColor(attr.value("color").toString());
@@ -307,7 +314,12 @@ Polygon* XmlParser::parsePolygon(QXmlStreamReader& xml){
 			}
 			polygon->addPoint(point);
 			vertexCount++;
+		}else if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="material"){
+			material_parameters = getMaterialParameters(xml);
 		}
+	}
+	for(int i=0;i<material_parameters.count();i++){
+		polygon->setMaterialParameter(*(material_parameters.at(i)));
 	}
 	return polygon;
 }

@@ -16,3 +16,11 @@ QList<Point> Polygon::getPoints(){
 	}
 	return *(result);
 }
+
+QList<const MaterialParameter*> Polygon::getMaterialParameters(){
+	return this->material.getParameters();
+}
+
+void Polygon::setMaterialParameter(MaterialParameter &param){
+	this->material.setParameter(param);
+}

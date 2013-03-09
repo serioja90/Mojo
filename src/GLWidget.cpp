@@ -179,8 +179,17 @@ void GLWidget::paintObject(Object obj){
 
 	if(!quads.empty()){
 		for(int i=0;i<quads.count();i++){
+			Quad quad = quads.at(i);
+			QList<const MaterialParameter*> material_parameters = quad.getMaterialParameters();
+			for(int j=0;j<material_parameters.count();j++){
+				const MaterialParameter* parameter = material_parameters.at(j);
+				if(parameter->hasVectorValue()){
+					glMaterialfv(parameter->getFace(),parameter->getParameter(),parameter->getVectorValue());
+				}else{
+					glMaterialf(parameter->getFace(),parameter->getParameter(),parameter->getValue());
+				}
+			}
 			glBegin(GL_QUADS);
-					Quad quad = quads.at(i);
 					glNormal3fv(getNormal(quad.getPoints()));
 					this->pointsToVertex(quad.getPoints());
 			glEnd();
@@ -189,8 +198,17 @@ void GLWidget::paintObject(Object obj){
 
 	if(!polygons.empty()){
 		for(int i=0;i<polygons.count();i++){
+			Polygon polygon = polygons.at(i);
+			QList<const MaterialParameter*> material_parameters = polygon.getMaterialParameters();
+			for(int j=0;j<material_parameters.count();j++){
+				const MaterialParameter* parameter = material_parameters.at(j);
+				if(parameter->hasVectorValue()){
+					glMaterialfv(parameter->getFace(),parameter->getParameter(),parameter->getVectorValue());
+				}else{
+					glMaterialf(parameter->getFace(),parameter->getParameter(),parameter->getValue());
+				}
+			}
 			glBegin(GL_POLYGON);
-					Polygon polygon = polygons.at(i);
 					this->pointsToVertex(polygon.getPoints());
 			glEnd();
 		}

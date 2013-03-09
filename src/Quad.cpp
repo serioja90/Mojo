@@ -56,3 +56,14 @@ int Quad::getPointsOrder(){
 	}
 	return this->pointsOrder;
 }
+
+QList<const MaterialParameter*> Quad::getMaterialParameters(){
+	if(this->isEmpty()){
+		throw Exception::EmptyQuadException;
+	}
+	return this->material.getParameters();
+}
+
+void Quad::setMaterialParameter(MaterialParameter &param){
+	this->material.setParameter(param);
+}
