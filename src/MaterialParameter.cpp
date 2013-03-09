@@ -12,34 +12,24 @@ void MaterialParameter::setFace(GLint face){
 	}
 }
 
-bool MaterialParameter::isEmpty(){
-	return this->empty;
-}
 
-bool MaterialParameter::hasVectorValue(){
+bool MaterialParameter::hasVectorValue() const{
 	return this->vector;
 }
 
-GLint MaterialParameter::getFace(){
-	if(this->isEmpty()){
-		throw Exception::EmptyMaterialParameterException;
-	}
+GLint MaterialParameter::getFace() const{
 	return this->face;
 }
 
 void MaterialParameter::setValue(GLfloat value){
-	if(this->isEmpty()){
-		throw Exception::EmptyMaterialParameterException;
-	}else if(this->hasVectorValue()){
+	if(this->hasVectorValue()){
 		throw Exception::WrongTypeException;
 	}
 	this->value = value;
 }
 
 void MaterialParameter::setVectorValue(GLfloat value[4]){
-	if(this->isEmpty()){
-		throw Exception::EmptyMaterialParameterException;
-	}else if(!this->hasVectorValue()){
+	if(!this->hasVectorValue()){
 		throw Exception::WrongTypeException;
 	}
 	for(int i=0;i<4;i++){
@@ -47,19 +37,15 @@ void MaterialParameter::setVectorValue(GLfloat value[4]){
 	}
 }
 
-GLfloat MaterialParameter::getValue(){
-	if(this->isEmpty()){
-		throw Exception::EmptyMaterialParameterException;
-	}else if(this->hasVectorValue()){
+GLfloat MaterialParameter::getValue() const{
+	if(this->hasVectorValue()){
 		throw Exception::WrongTypeException;
 	}
 	return this->value;
 }
 
-GLfloat* MaterialParameter::getVectorValue(){
-	if(this->isEmpty()){
-		throw Exception::EmptyMaterialParameterException;
-	}else if(!this->hasVectorValue()){
+const GLfloat* MaterialParameter::getVectorValue() const{
+	if(!this->hasVectorValue()){
 		throw Exception::WrongTypeException;
 	}
 	return this->vectorValue;

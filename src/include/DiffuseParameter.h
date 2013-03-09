@@ -5,11 +5,11 @@
 #include "Exception.h"
 #include "MaterialParameter.h"
 
-class DiffuseParameter : MaterialParameter{
+class DiffuseParameter : public MaterialParameter{
 	public:
 		DiffuseParameter();
 		DiffuseParameter(GLint face, GLfloat value[4]);
-		GLint getParameter();
+		GLint getParameter() const;
 };
 
 #endif

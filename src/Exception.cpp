@@ -147,5 +147,29 @@ const Exception Exception::EmptySpecularParameterException = Exception(
 const Exception Exception::EmptyShininessParameterException = Exception(
 	21,
 	"EmptyShininessParameterException",
-	"Cannot set ot get information for empty shininess parameter"
+	"Cannot set or get information for empty shininess parameter"
+);
+
+const Exception Exception::EmptyEmissionParameterException = Exception(
+	22,
+	"EmptyEmissionParameterException",
+	"Cannot set or get information for empty emission parameter"
+);
+
+const Exception Exception::InvalidMaterialParameterException = Exception(
+	23,
+	"InvalidMaterialParameterException",
+	"Invalid value for material parameter attribute"
+);
+
+const Exception Exception::InvalidXmlMaterialParameterFace = Exception(
+	24,
+	"InvalidXmlMaterialParameterFace",
+	"Invalid value for material parameter face"
+);
+
+const Exception Exception::InvalidXmlMaterialParameterValue = Exception(
+	25,
+	"InvalidXmlMaterialParameterValue",
+	"Invalid value for material parameter"
 );

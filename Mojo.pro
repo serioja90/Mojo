@@ -28,12 +28,12 @@ HEADERS +=  src/include/MainWindow.h\
 			src/include/Triangle.h\
 			src/include/Quad.h\
 			src/include/Polygon.h\
-			src/include/MaterialProperty.h\
 			src/include/MaterialParameter.h\
 			src/include/AmbientParameter.h\
 			src/include/DiffuseParameter.h\
 			src/include/SpecularParameter.h\
 			src/include/ShininessParameter.h\
+			src/include/EmissionParameter.h\
 			src/include/Material.h\
 			src/include/Object.h
 SOURCES +=  src/main.cpp\
@@ -47,12 +47,12 @@ SOURCES +=  src/main.cpp\
 			src/Triangle.cpp\
 			src/Quad.cpp\
 			src/Polygon.cpp\
-			src/MaterialProperty.cpp\
 			src/MaterialParameter.cpp\
 			src/AmbientParameter.cpp\
 			src/DiffuseParameter.cpp\
 			src/SpecularParameter.cpp\
 			src/ShininessParameter.cpp\
+			src/EmissionParameter.cpp\
 			src/Material.cpp\
 			src/Object.cpp\
 

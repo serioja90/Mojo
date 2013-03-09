@@ -33,6 +33,10 @@ class Exception{
 		static const Exception EmptyDiffuseParameterException;
 		static const Exception EmptySpecularParameterException;
 		static const Exception EmptyShininessParameterException;
+		static const Exception EmptyEmissionParameterException;
+		static const Exception InvalidMaterialParameterException;
+		static const Exception InvalidXmlMaterialParameterFace;
+		static const Exception InvalidXmlMaterialParameterValue;
 	private:
 		int code;
 		QString name;

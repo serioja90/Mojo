@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "Exception.h"
 #include "Material.h"
+#include "MaterialParameter.h"
 
 class Triangle{
 	public:
@@ -15,7 +16,8 @@ class Triangle{
 		bool isEmpty();
 		QList<Point> getPoints();
 		int getPointsOrder();
-		Material getMaterial();
+		QList<const MaterialParameter*> getMaterialParameters();
+		void setMaterialParameter(MaterialParameter &param);
 	protected:
 		bool empty;
 		int pointsOrder;

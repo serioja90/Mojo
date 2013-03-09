@@ -9,14 +9,12 @@ class MaterialParameter{
 		void setFace(GLint face);
 		void setValue(GLfloat value);
 		void setVectorValue(GLfloat value[4]);
-		GLint getFace();
-		GLfloat getValue();
-		GLfloat* getVectorValue();
-		bool isEmpty();
-		bool hasVectorValue();
-		virtual GLint getParameter() = 0;
+		GLint getFace() const;
+		GLfloat getValue() const;
+		const GLfloat* getVectorValue() const;
+		bool hasVectorValue() const;
+		virtual GLint getParameter() const = 0;
 	protected:
-		bool empty;
 		bool vector;
 		GLint face;
 		GLfloat value;

@@ -28,6 +28,7 @@ void Triangle::setPointsOrder(int order){
 		throw Exception::InvalidPointsOrderException;
 	}
 	if(order!=this->pointsOrder){
+		GLfloat emission_value[4] = {0.6f,0.3f,0.4f,1.0f};
 		for(int i=0;i<points.length()/2;i++){
 			points.swap(i,points.length()-i-1);
 		}
@@ -53,9 +54,13 @@ int Triangle::getPointsOrder(){
 	return this->pointsOrder;
 }
 
-Material Triangle::getMaterial(){
-	return this->material;
+QList<const MaterialParameter*> Triangle::getMaterialParameters(){
+	if(this->isEmpty()){
+		throw Exception::EmptyTriangleException;
+	}
+	return this->material.getParameters();
 }
 
-
-
+void Triangle::setMaterialParameter(MaterialParameter &param){
+	this->material.setParameter(param);
+}

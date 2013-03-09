@@ -51,6 +51,12 @@ Object XmlParser::parseObject(QXmlStreamReader& xml){
 				}
 			}
 		}catch(Exception e){
+			QString msg = QString("Exception ") + QString::number(e.getCode()) + QString(":\n");
+			msg += QString("'") + QString(e.getName()) + QString("'") ;
+			msg += QString(" at line ") + QString::number(xml.lineNumber()) +QString("\n");
+			msg += QString(e.getDescription());
+			QMessageBox::critical(NULL,QString("Mojo"),msg);
+			break;
 			qDebug() << "Thrown exception: " << e.getCode() << "\t" << e.getName() << "\n" << e.getDescription();
 		}
 	}
@@ -131,6 +137,52 @@ Color XmlParser::getColor(const QString& col){
 	return Color(r,g,b,a);
 }
 
+QList<MaterialParameter*> XmlParser::getMaterialParameters(QXmlStreamReader& xml){
+	QList<MaterialParameter*> material_parameters;
+	GLfloat value[4];
+	QStringList vals;
+	GLint face;
+	QXmlStreamAttributes attr;
+	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="material")){
+		xml.readNext();
+		attr = xml.attributes();
+		if(attr.hasAttribute("face")){
+			if(attr.value("face").toString().toLower()=="front"){
+				face = GL_FRONT;
+			}else if(attr.value("face").toString().toLower()=="back"){
+				face = GL_BACK;
+			}else if(attr.value("face").toString().toLower()=="front_and_back"){
+				face = GL_FRONT_AND_BACK;
+			}else{
+				throw Exception::InvalidXmlMaterialParameterFace;
+			}
+		}else{
+			face = GL_FRONT_AND_BACK;
+		}
+		if(attr.hasAttribute("value")){
+			vals = attr.value("value").toString().split(",");
+			if(vals.count()!=1 && vals.count()!=4){
+				throw Exception::InvalidXmlMaterialParameterValue;
+			}
+			for(int i=0;i<4 && i<vals.count();i++){
+				value[i] = vals.at(i).toFloat();
+			}
+		}
+		if(xml.name()=="ambient"){
+			material_parameters.append(new AmbientParameter(face,value));
+		}else if(xml.name()=="diffuse"){
+			material_parameters.append(new DiffuseParameter(face,value));
+		}else if(xml.name()=="specular"){
+			material_parameters.append(new SpecularParameter(face,value));
+		}else if(xml.name()=="shininess"){
+			material_parameters.append(new ShininessParameter(face,value[0]));
+		}else if(xml.name()=="emission"){
+			material_parameters.append(new EmissionParameter(face,value));
+		}
+	}
+	return material_parameters;
+}
+
 Line* XmlParser::parseLine(QXmlStreamReader& xml){
 	Line* line;
 	Point points[2];
@@ -167,6 +219,7 @@ Triangle* XmlParser::parseTriangle(QXmlStreamReader& xml){
 	int order = GL_CCW;
 	Point points[3];
 	Color color = Color();
+	QList<MaterialParameter*> material_parameters;
 	QXmlStreamAttributes attr = xml.attributes();
 	if(attr.hasAttribute("color")){
 		color = getColor(attr.value("color").toString());
@@ -187,12 +240,17 @@ Triangle* XmlParser::parseTriangle(QXmlStreamReader& xml){
 				points[vertexCount].setColor(color);
 			}
 			vertexCount++;
+		}else if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="material"){
+			material_parameters = getMaterialParameters(xml);
 		}
 	}
 	if(vertexCount!=3){
 		throw Exception::InvalidXmlTriangleFormatException;
 	}
 	triangle = new Triangle(points[0],points[1],points[2],order);
+	for(int i=0;i<material_parameters.count();i++){
+		triangle->setMaterialParameter(*(material_parameters.at(i)));
+	}
 	return triangle;
 }
 

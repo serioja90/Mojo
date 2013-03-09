@@ -5,11 +5,11 @@
 #include "Exception.h"
 #include "MaterialParameter.h"
 
-class ShininessParameter : MaterialParameter{
+class ShininessParameter : public MaterialParameter{
 	public:
 		ShininessParameter();
 		ShininessParameter(GLint face, GLfloat value);
-		GLint getParameter();
+		GLint getParameter() const;
 };
 
 #endif

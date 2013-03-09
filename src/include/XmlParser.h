@@ -23,6 +23,7 @@ class XmlParser{
 		Polygon* parsePolygon(QXmlStreamReader& xml);
 		Color parseColor(QXmlStreamReader& xml);
 		Color getColor(const QString&);
+		QList<MaterialParameter*> getMaterialParameters(QXmlStreamReader& xml);
 };
 
 #endif
