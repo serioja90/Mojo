@@ -4,8 +4,9 @@ Object::Object(){
 	points = new QList<Point>();
 	lines = new QList<Line*>();
 	triangles = new QList<Triangle*>();
-	quads = new QList<Quad>();
+	quads = new QList<Quad*>();
 	polygons = new QList<Polygon*>();
+	spheres = new QList<Sphere*>();
 }
 
 void Object::addPoint(Point point){
@@ -20,12 +21,16 @@ void Object::addTriangle(Triangle* triangle){
 	triangles->append(triangle);
 }
 
-void Object::addQuad(Quad quad){
+void Object::addQuad(Quad* quad){
 	quads->append(quad);
 }
 
 void Object::addPolygon(Polygon* polygon){
 	polygons->append(polygon);
+}
+
+void Object::addSphere(Sphere* sphere){
+	spheres->append(sphere);
 }
 
 QList<Point> Object::getPoints(){
@@ -58,7 +63,7 @@ QList<Triangle> Object::getTriangles(){
 QList<Quad> Object::getQuads(){
 	QList<Quad>* result = new QList<Quad>();
 	for(int i=0;i<this->quads->count();i++){
-		Quad quad = this->quads->at(i);
+		Quad quad = *(this->quads->at(i));
 		result->append(quad);
 	}
 	return *(result);
@@ -71,4 +76,13 @@ QList<Polygon> Object::getPolygons(){
 		result->append(polygon);
 	}
 	return *(result);
+}
+
+QList<Sphere> Object::getSpheres(){
+	QList<Sphere> result = QList<Sphere>();
+	for(int i=0;i<this->spheres->count();i++){
+		Sphere sphere = *(this->spheres->at(i));
+		result.append(sphere);
+	}
+	return result;
 }

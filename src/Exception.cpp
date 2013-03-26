@@ -173,3 +173,39 @@ const Exception Exception::InvalidXmlMaterialParameterValue = Exception(
 	"InvalidXmlMaterialParameterValue",
 	"Invalid value for material parameter"
 );
+
+const Exception Exception::InvalidQuadricDrawStyleException = Exception(
+	26,
+	"InvalidQuadrciDrawStyleException",
+	"Invalid value for quadric draw style attribute"
+);
+
+const Exception Exception::InvalidQuadricNormalsTypeException = Exception(
+	27,
+	"InvalidQuadricNormalsTypeException",
+	"Invalid value for quadric normals type arrtibute"
+);
+
+const Exception Exception::InvalidQuadricOrientationException = Exception(
+	28,
+	"InvalidQuadricOrientationException",
+	"Invalid value for quadric orientation attribute"
+);
+
+const Exception Exception::InvalidQuadricTextureMappingTypeException = Exception(
+	29,
+	"InvalidQuadricTextureMappingTypeException",
+	"Invalid value for quadric texture mapping type attribute"
+);
+
+const Exception Exception::EmptyQuadricException = Exception(
+	30,
+	"EmptyQuadricException",
+	"Cannot set or get information for empty quadric"
+);
+
+const Exception Exception::InvalidXmlSphereOriginException = Exception(
+	31,
+	"InvalidXmlSphereOriginException",
+	"Invalid value for sphere origin"
+);

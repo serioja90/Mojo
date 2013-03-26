@@ -7,6 +7,7 @@
 #include "Triangle.h"
 #include "Quad.h"
 #include "Polygon.h"
+#include "Sphere.h"
 
 class Object{
 	public:
@@ -14,19 +15,22 @@ class Object{
 		void addPoint(Point point);
 		void addLine(Line* line);
 		void addTriangle(Triangle* triangle);
-		void addQuad(Quad quad);
+		void addQuad(Quad* quad);
 		void addPolygon(Polygon* polygon);
+		void addSphere(Sphere* sphere);
 		QList<Point> getPoints();
 		QList<Line> getLines();
 		QList<Triangle> getTriangles();
 		QList<Quad> getQuads();
 		QList<Polygon> getPolygons();
+		QList<Sphere> getSpheres();
 	protected:
 		QList<Point>* points;
 		QList<Line*>* lines;
 		QList<Triangle*>* triangles;
-		QList<Quad>* quads;
+		QList<Quad*>* quads;
 		QList<Polygon*>* polygons;
+		QList<Sphere*>* spheres;
 };
 
 #endif

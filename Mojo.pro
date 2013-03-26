@@ -35,6 +35,8 @@ HEADERS +=  src/include/MainWindow.h\
 			src/include/ShininessParameter.h\
 			src/include/EmissionParameter.h\
 			src/include/Material.h\
+			src/include/Quadric.h\
+			src/include/Sphere.h\
 			src/include/Object.h
 SOURCES +=  src/main.cpp\
 			src/Exception.cpp\
@@ -54,6 +56,8 @@ SOURCES +=  src/main.cpp\
 			src/ShininessParameter.cpp\
 			src/EmissionParameter.cpp\
 			src/Material.cpp\
-			src/Object.cpp\
+			src/Quadric.cpp\
+			src/Sphere.cpp\
+			src/Object.cpp
 
 RESOURCES += resources/icons.qrc

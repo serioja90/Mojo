@@ -37,6 +37,7 @@ bool Point::isEmpty(){
 	return this->empty;
 }
 
+
 GLfloat Point::getX(){
 	if(this->isEmpty()){
 		throw Exception::EmptyPointException;

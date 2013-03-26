@@ -48,6 +48,8 @@ Object XmlParser::parseObject(QXmlStreamReader& xml){
 					obj->addQuad(parseQuad(xml));
 				}else if(xml.name()=="polygon"){
 					obj->addPolygon(parsePolygon(xml));
+				}else if(xml.name()=="sphere"){
+					obj->addSphere(parseSphere(xml));
 				}
 			}
 		}catch(Exception e){
@@ -254,8 +256,8 @@ Triangle* XmlParser::parseTriangle(QXmlStreamReader& xml){
 	return triangle;
 }
 
-Quad XmlParser::parseQuad(QXmlStreamReader& xml){
-	Quad quad;
+Quad* XmlParser::parseQuad(QXmlStreamReader& xml){
+	Quad* quad;
 	int order = GL_CCW;
 	Color color = Color();
 	Point points[4];
@@ -287,9 +289,9 @@ Quad XmlParser::parseQuad(QXmlStreamReader& xml){
 	if(vertexCount!=4){
 		throw Exception::InvalidXmlQuadFormatException;
 	}
-	quad = Quad(points[0],points[1],points[2],points[3],order);
+	quad = new Quad(points[0],points[1],points[2],points[3],order);
 	for(int i=0;i<material_parameters.count();i++){
-		quad.setMaterialParameter(*(material_parameters.at(i)));
+		quad->setMaterialParameter(*(material_parameters.at(i)));
 	}
 	return quad;
 }
@@ -322,4 +324,39 @@ Polygon* XmlParser::parsePolygon(QXmlStreamReader& xml){
 		polygon->setMaterialParameter(*(material_parameters.at(i)));
 	}
 	return polygon;
+}
+
+Sphere* XmlParser::parseSphere(QXmlStreamReader& xml){
+	Sphere* sphere = new Sphere();
+	Point origin;
+	Color color = Color();
+	QStringList vals;
+	QXmlStreamAttributes attr = xml.attributes();
+	if(attr.hasAttribute("origin")){
+		vals = attr.value("origin").toString().split(",");
+		if(vals.count()==3){
+			GLfloat x,y,z;
+			x = vals.at(0).toFloat();
+			y = vals.at(1).toFloat();
+			z = vals.at(2).toFloat();
+			origin = Point(x,y,z);
+		}else{
+			throw Exception::InvalidXmlSphereOriginException;
+		}
+		if(attr.hasAttribute("color")){
+			color = getColor(attr.value("color").toString());
+			origin.setColor(color);
+		}
+		sphere->setOrigin(origin);
+	}
+	if(attr.hasAttribute("radius")){
+		sphere->setRadius(attr.value("radius").toString().toFloat());
+	}
+	if(attr.hasAttribute("detalization")){
+		sphere->setDetalization(attr.value("detalization").toString().toFloat());
+	}
+	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="sphere")){
+		xml.readNext();
+	}
+	return sphere;
 }

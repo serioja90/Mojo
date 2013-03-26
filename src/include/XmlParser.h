@@ -19,8 +19,9 @@ class XmlParser{
 		Point parsePoint(QXmlStreamReader& xml);
 		Line* parseLine(QXmlStreamReader& xml);
 		Triangle* parseTriangle(QXmlStreamReader& xml);
-		Quad parseQuad(QXmlStreamReader& xml);
+		Quad* parseQuad(QXmlStreamReader& xml);
 		Polygon* parsePolygon(QXmlStreamReader& xml);
+		Sphere* parseSphere(QXmlStreamReader& xml);
 		Color parseColor(QXmlStreamReader& xml);
 		Color getColor(const QString&);
 		QList<MaterialParameter*> getMaterialParameters(QXmlStreamReader& xml);

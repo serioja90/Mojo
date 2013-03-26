@@ -34,11 +34,26 @@ void GLWidget::setObjects(QList<Object> objects){
 }
 
 void GLWidget::initializeGL(){
+	GLint nPoints = 4;
+	GLfloat ctrlPoints[4][3] = {
+		{-4.0f, 0.0f, 0.0f},
+		{-6.0f, 4.0f, 0.0f},
+		{6.0f, -4.0f, 0.0f},
+		{4.0f, 0.0f, 0.0f}
+	};
+
+	GLint nPoints2 = 3;
+	GLfloat ctrlPoints2[3][3][3] = {
+		{{-4.0f,0.0f,4.0f},{-2.0f,4.0f,4.0f},{4.0f,0.0f,4.0f}},
+		{{-4.0f,0.0f,0.0f},{-2.0f,4.0f,0.0f},{4.0f,0.0f,0.0f}},
+		{{-4.0f,0.0f,-4.0f},{-2.0f,4.0f,-4.0f},{4.0f,0.0f,-4.0f}}
+	};
+
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	glClearColor(0.0f,0.0f,0.0f,0.0f);
+	glClearColor(0.8f,0.8f,0.8f,0.0f);
 	glClearDepth(1.0f);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
@@ -50,8 +65,8 @@ void GLWidget::initializeGL(){
 	// glLightfv(GL_LIGHT0,GL_SPECULAR,specilar);
 
 	//glEnable(GL_LIGHT0);
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_RESCALE_NORMAL);
@@ -59,6 +74,11 @@ void GLWidget::initializeGL(){
 	GLfloat material_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
 	glMaterialf(GL_FRONT,GL_SHININESS,128.0f);
+	glMap1f(GL_MAP1_VERTEX_3,0.0f,100.0f,3,nPoints,&ctrlPoints[0][0]);
+	glEnable(GL_MAP1_VERTEX_3);
+	glMap2f(GL_MAP2_VERTEX_3,0.0f,10.0f,3,3,0.0f,10.0f,9,3,&ctrlPoints2[0][0][0]);
+	glEnable(GL_MAP2_VERTEX_3);
+	glEnable(GL_AUTO_NORMAL);
 	timer->start();
 }
 
@@ -100,6 +120,16 @@ void GLWidget::paintGL(){
 		glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light0_spot_direction);
 		// glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 15.0);
 	glPopMatrix();
+
+	// glPushMatrix();
+	// 	glColor4f(0.0f,1.0f,0.0f,0.0f);
+	// 	glMapGrid1d(100,0.0f,100.0f);
+	// 	glEvalMesh1(GL_LINE,0,100);
+	// 	glColor4f(1.0f,0.0f,0.0f,0.0f);
+	// 	glMapGrid2f(100,0.0f,10.0f,100,0.0f,10.0f);
+	// 	glEvalMesh2(GL_FILL,0,100,0,100);
+	// glPopMatrix();
+
 
 	try{
 		glPushMatrix();
@@ -145,6 +175,7 @@ void GLWidget::paintObject(Object obj){
 	QList<Triangle> triangles = obj.getTriangles();
 	QList<Quad> quads = obj.getQuads();
 	QList<Polygon> polygons = obj.getPolygons();
+	QList<Sphere> spheres = obj.getSpheres();
 	if(!points.empty()){
 		glBegin(GL_POINTS);
 			this->pointsToVertex(points);
@@ -213,6 +244,21 @@ void GLWidget::paintObject(Object obj){
 			glEnd();
 		}
 	}
+
+	if(!spheres.empty()){
+		GLUquadricObj* quadric = gluNewQuadric();
+		for(int i=0;i<spheres.count();i++){
+			Sphere sphere = spheres.at(i);
+			Color color = sphere.getOrigin().getColor();
+			glColor4f(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+			glPushMatrix();
+				const GLfloat* origin = Point::toArray(sphere.getOrigin());
+				glTranslatef(origin[0],origin[1],origin[2]);
+				gluSphere(quadric,sphere.getRadius(),sphere.getDetalization(),sphere.getDetalization());
+			glPopMatrix();
+		}
+		gluDeleteQuadric(quadric);
+	}
 }
 
 void GLWidget::pointsToVertex(QList<Point> points){
@@ -257,7 +303,7 @@ GLfloat* GLWidget::getNormal(QList<Point> points){
 	int i;
 	GLfloat normal[3] = {0.0f,0.0f,0.0f};
 	GLfloat length;
-	for(i=0;i<3 && i<points.count();i++){
+	for(i=0;i<points.count();i++){
 		Point p1 = points.at(i);
 		Point p2 = points.at((i+1) % points.count());
 		if(p1.isEmpty() || p2.isEmpty()){

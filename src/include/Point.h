@@ -12,9 +12,6 @@ class Point{
 		Point(GLfloat xCoord, GLfloat yCoord, GLfloat zCoord);
 		Point(GLint xCoord, GLint yCoord, GLint zCoord);
 		bool isEmpty();
-		// void setX(GLfloat xCoord);
-		// void setY(GLfloat yCoord);
-		// void setZ(GLfloat zCoord);
 		void setColor(Color color);
 		GLfloat getX();
 		GLfloat getY();

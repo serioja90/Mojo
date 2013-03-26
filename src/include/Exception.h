@@ -37,6 +37,12 @@ class Exception{
 		static const Exception InvalidMaterialParameterException;
 		static const Exception InvalidXmlMaterialParameterFace;
 		static const Exception InvalidXmlMaterialParameterValue;
+		static const Exception InvalidQuadricDrawStyleException;
+		static const Exception InvalidQuadricNormalsTypeException;
+		static const Exception InvalidQuadricOrientationException;
+		static const Exception InvalidQuadricTextureMappingTypeException;
+		static const Exception EmptyQuadricException;
+		static const Exception InvalidXmlSphereOriginException;
 	private:
 		int code;
 		QString name;
