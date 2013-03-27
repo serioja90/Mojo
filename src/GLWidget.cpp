@@ -65,8 +65,8 @@ void GLWidget::initializeGL(){
 	// glLightfv(GL_LIGHT0,GL_SPECULAR,specilar);
 
 	//glEnable(GL_LIGHT0);
-	//glCullFace(GL_BACK);
-	//glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_RESCALE_NORMAL);
@@ -254,6 +254,10 @@ void GLWidget::paintObject(Object obj){
 			glPushMatrix();
 				const GLfloat* origin = Point::toArray(sphere.getOrigin());
 				glTranslatef(origin[0],origin[1],origin[2]);
+				gluQuadricDrawStyle(quadric,sphere.getDrawStyle());
+				gluQuadricNormals(quadric,sphere.getNormalsType());
+				gluQuadricOrientation(quadric,sphere.getOrientation());
+				gluQuadricTexture(quadric,sphere.isTextureUniform());
 				gluSphere(quadric,sphere.getRadius(),sphere.getDetalization(),sphere.getDetalization());
 			glPopMatrix();
 		}

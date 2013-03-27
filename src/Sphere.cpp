@@ -2,7 +2,7 @@
 
 Sphere::Sphere(){
 	this->empty = true;
-	this->origin = Point(1.0f,1.0f,1.0f);
+	this->origin = Point(0.0f,0.0f,0.0f);
 	this->radius = 0.5f;
 	this->detalization = 25;
 	this->drawStyle = GL_FILL;

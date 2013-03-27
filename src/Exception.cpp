@@ -209,3 +209,27 @@ const Exception Exception::InvalidXmlSphereOriginException = Exception(
 	"InvalidXmlSphereOriginException",
 	"Invalid value for sphere origin"
 );
+
+const Exception Exception::InvalidXmlQuadricDrawStyleException = Exception(
+	32,
+	"InvalidXmlQuadricDrawStyleException",
+	"Invalid value for quadric draw style"
+);
+
+const Exception Exception::InvalidXmlQuadricNormalsTypeException = Exception(
+	33,
+	"InvalidXmlQuadricNormalsTypeException",
+	"Invalid value for quadric normals type"
+);
+
+const Exception Exception::InvalidXmlQuadricOrientationException = Exception(
+	34,
+	"InvalidXmlQuadricOrientationException",
+	"Invalid value for quadric orientation"
+);
+
+const Exception Exception::InvalidXmlQuadricTextureMappingTypeException = Exception(
+	35,
+	"InvalidXmlQuadricTextureMappingTypeException",
+	"Invalid value for quadric texture mapping type"
+);

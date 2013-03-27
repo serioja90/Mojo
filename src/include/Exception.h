@@ -43,6 +43,10 @@ class Exception{
 		static const Exception InvalidQuadricTextureMappingTypeException;
 		static const Exception EmptyQuadricException;
 		static const Exception InvalidXmlSphereOriginException;
+		static const Exception InvalidXmlQuadricDrawStyleException;
+		static const Exception InvalidXmlQuadricNormalsTypeException;
+		static const Exception InvalidXmlQuadricOrientationException;
+		static const Exception InvalidXmlQuadricTextureMappingTypeException;
 	private:
 		int code;
 		QString name;
