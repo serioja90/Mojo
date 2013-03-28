@@ -8,6 +8,7 @@ Object::Object(){
 	polygons = new QList<Polygon*>();
 	spheres = new QList<Sphere*>();
 	cylinders = new QList<Cylinder*>();
+	disks = new QList<Disk*>();
 }
 
 void Object::addPoint(Point point){
@@ -36,6 +37,10 @@ void Object::addSphere(Sphere* sphere){
 
 void Object::addCylinder(Cylinder* cylinder){
 	cylinders->append(cylinder);
+}
+
+void Object::addDisk(Disk* disk){
+	disks->append(disk);
 }
 
 QList<Point> Object::getPoints(){
@@ -97,6 +102,15 @@ QList<Cylinder> Object::getCylinders(){
 	for(int i=0;i<this->cylinders->count();i++){
 		Cylinder cylinder = *(this->cylinders->at(i));
 		result.append(cylinder);
+	}
+	return result;
+}
+
+QList<Disk> Object::getDisks(){
+	QList<Disk> result = QList<Disk>();
+	for(int i=0;i<this->disks->count();i++){
+		Disk disk = *(this->disks->at(i));
+		result.append(disk);
 	}
 	return result;
 }

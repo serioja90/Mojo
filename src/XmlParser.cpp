@@ -52,6 +52,8 @@ Object XmlParser::parseObject(QXmlStreamReader& xml){
 					obj->addSphere(parseSphere(xml));
 				}else if(xml.name()=="cylinder"){
 					obj->addCylinder(parseCylinder(xml));
+				}else if(xml.name()=="disk"){
+					obj->addDisk(parseDisk(xml));
 				}
 			}
 		}catch(Exception e){
@@ -455,4 +457,43 @@ Cylinder* XmlParser::parseCylinder(QXmlStreamReader& xml){
 		xml.readNext();
 	}
 	return cylinder;
+}
+
+Disk* XmlParser::parseDisk(QXmlStreamReader& xml){
+	Disk* disk = new Disk();
+	Point origin;
+	Color color = Color();
+	QStringList vals;
+	QXmlStreamAttributes attr = xml.attributes();
+	if(attr.hasAttribute("origin")){
+		vals = attr.value("origin").toString().split(",");
+		if(vals.count()==3){
+			GLfloat x,y,z;
+			x = vals.at(0).toFloat();
+			y = vals.at(1).toFloat();
+			z = vals.at(2).toFloat();
+			origin = Point(x,y,z);
+		}else{
+			throw Exception::InvalidXmlSphereOriginException;
+		}
+		if(attr.hasAttribute("color")){
+			color = getColor(attr.value("color").toString());
+			origin.setColor(color);
+		}
+		disk->setOrigin(origin);
+	}
+	if(attr.hasAttribute("innerRadius")){
+		disk->setInnerRadius(attr.value("innerRadius").toString().toFloat());
+	}
+	if(attr.hasAttribute("outerRadius")){
+		disk->setOuterRadius(attr.value("outerRadius").toString().toFloat());
+	}
+	if(attr.hasAttribute("detalization")){
+		disk->setDetalization(attr.value("detalization").toString().toFloat());
+	}
+	disk->setQuadricAttributes(getQuadricFromAttributes(attr));
+	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="disk")){
+		xml.readNext();
+	}
+	return disk;
 }

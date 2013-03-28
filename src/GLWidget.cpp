@@ -177,6 +177,7 @@ void GLWidget::paintObject(Object obj){
 	QList<Polygon> polygons = obj.getPolygons();
 	QList<Sphere> spheres = obj.getSpheres();
 	QList<Cylinder> cylinders = obj.getCylinders();
+	QList<Disk> disks = obj.getDisks();
 	if(!points.empty()){
 		glBegin(GL_POINTS);
 			this->pointsToVertex(points);
@@ -280,6 +281,25 @@ void GLWidget::paintObject(Object obj){
 				gluQuadricTexture(quadric,cylinder.isTextureUniform());
 				gluCylinder(quadric,cylinder.getBaseRadius(),cylinder.getTopRadius(), cylinder.getHeight(),
 							cylinder.getDetalization(),cylinder.getDetalization());
+			glPopMatrix();
+		}
+		gluDeleteQuadric(quadric);
+	}
+
+	if(!disks.empty()){
+		GLUquadricObj* quadric = gluNewQuadric();
+		for(int i=0;i<disks.count();i++){
+			Disk disk = disks.at(i);
+			Color color = disk.getOrigin().getColor();
+			glColor4f(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+			glPushMatrix();
+				const GLfloat* origin = Point::toArray(disk.getOrigin());
+				glTranslatef(origin[0],origin[1],origin[2]);
+				gluQuadricDrawStyle(quadric,disk.getDrawStyle());
+				gluQuadricNormals(quadric,disk.getNormalsType());
+				gluQuadricOrientation(quadric,disk.getOrientation());
+				gluQuadricTexture(quadric,disk.isTextureUniform());
+				gluDisk(quadric,disk.getInnerRadius(),disk.getOuterRadius(),disk.getDetalization(),disk.getDetalization());
 			glPopMatrix();
 		}
 		gluDeleteQuadric(quadric);
