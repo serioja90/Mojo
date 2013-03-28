@@ -7,6 +7,7 @@
 
 class Quadric{
 	public:
+		Quadric();
 		void setDrawStyle(GLenum drawStyle);
 		GLenum getDrawStyle();
 		void setNormalsType(GLenum normalsType);
@@ -16,6 +17,7 @@ class Quadric{
 		void setTextureUniform(GLenum isUniform);
 		GLenum isTextureUniform();
 		bool isEmpty();
+		void setQuadricAttributes(Quadric quadric);
 	protected:
 		bool empty;
 		GLenum drawStyle;

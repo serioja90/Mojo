@@ -65,8 +65,8 @@ void GLWidget::initializeGL(){
 	// glLightfv(GL_LIGHT0,GL_SPECULAR,specilar);
 
 	//glEnable(GL_LIGHT0);
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_RESCALE_NORMAL);
@@ -176,6 +176,7 @@ void GLWidget::paintObject(Object obj){
 	QList<Quad> quads = obj.getQuads();
 	QList<Polygon> polygons = obj.getPolygons();
 	QList<Sphere> spheres = obj.getSpheres();
+	QList<Cylinder> cylinders = obj.getCylinders();
 	if(!points.empty()){
 		glBegin(GL_POINTS);
 			this->pointsToVertex(points);
@@ -259,6 +260,26 @@ void GLWidget::paintObject(Object obj){
 				gluQuadricOrientation(quadric,sphere.getOrientation());
 				gluQuadricTexture(quadric,sphere.isTextureUniform());
 				gluSphere(quadric,sphere.getRadius(),sphere.getDetalization(),sphere.getDetalization());
+			glPopMatrix();
+		}
+		gluDeleteQuadric(quadric);
+	}
+
+	if(!cylinders.empty()){
+		GLUquadricObj* quadric = gluNewQuadric();
+		for(int i=0;i<cylinders.count();i++){
+			Cylinder cylinder = cylinders.at(i);
+			Color color = cylinder.getOrigin().getColor();
+			glColor4f(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+			glPushMatrix();
+				const GLfloat* origin = Point::toArray(cylinder.getOrigin());
+				glTranslatef(origin[0],origin[1],origin[2]);
+				gluQuadricDrawStyle(quadric,cylinder.getDrawStyle());
+				gluQuadricNormals(quadric,cylinder.getNormalsType());
+				gluQuadricOrientation(quadric,cylinder.getOrientation());
+				gluQuadricTexture(quadric,cylinder.isTextureUniform());
+				gluCylinder(quadric,cylinder.getBaseRadius(),cylinder.getTopRadius(), cylinder.getHeight(),
+							cylinder.getDetalization(),cylinder.getDetalization());
 			glPopMatrix();
 		}
 		gluDeleteQuadric(quadric);

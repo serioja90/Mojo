@@ -50,6 +50,8 @@ Object XmlParser::parseObject(QXmlStreamReader& xml){
 					obj->addPolygon(parsePolygon(xml));
 				}else if(xml.name()=="sphere"){
 					obj->addSphere(parseSphere(xml));
+				}else if(xml.name()=="cylinder"){
+					obj->addCylinder(parseCylinder(xml));
 				}
 			}
 		}catch(Exception e){
@@ -326,6 +328,57 @@ Polygon* XmlParser::parsePolygon(QXmlStreamReader& xml){
 	return polygon;
 }
 
+Quadric XmlParser::getQuadricFromAttributes(QXmlStreamAttributes& attr){
+	Quadric quadric = Quadric();
+	if(attr.hasAttribute("style")){
+		QString style = attr.value("style").toString().toLower();
+		if(style=="fill"){
+			quadric.setDrawStyle(GLU_FILL);
+		}else if(style=="line"){
+			quadric.setDrawStyle(GLU_LINE);
+		}else if(style=="point"){
+			quadric.setDrawStyle(GLU_POINT);
+		}else if(style=="silhouette"){
+			quadric.setDrawStyle(GLU_SILHOUETTE);
+		}else{
+			throw Exception::InvalidXmlQuadricDrawStyleException;
+		}
+	}
+	if(attr.hasAttribute("normals")){
+		QString normals = attr.value("normals").toString().toLower();
+		if(normals=="none"){
+			quadric.setNormalsType(GLU_NONE);
+		}else if(normals=="smooth"){
+			quadric.setNormalsType(GLU_SMOOTH);
+		}else if(normals=="flat"){
+			quadric.setNormalsType(GLU_FLAT);
+		}else{
+			throw Exception::InvalidXmlQuadricNormalsTypeException;
+		}
+	}
+	if(attr.hasAttribute("orientation")){
+		QString orientation = attr.value("orientation").toString().toLower();
+		if(orientation=="out"){
+			quadric.setOrientation(GLU_OUTSIDE);
+		}else if(orientation=="in"){
+			quadric.setOrientation(GLU_INSIDE);
+		}else{
+			throw Exception::InvalidXmlQuadricOrientationException;
+		}
+	}
+	if(attr.hasAttribute("uniform_texture")){
+		QString uniform_texture = attr.value("uniform_texture").toString().toLower();
+		if(uniform_texture=="true"){
+			quadric.setTextureUniform(GL_TRUE);
+		}else if(uniform_texture=="false"){
+			quadric.setTextureUniform(GL_FALSE);
+		}else{
+			throw Exception::InvalidXmlQuadricTextureMappingTypeException;
+		}
+	}
+	return quadric;
+}
+
 Sphere* XmlParser::parseSphere(QXmlStreamReader& xml){
 	Sphere* sphere = new Sphere();
 	Point origin;
@@ -355,54 +408,51 @@ Sphere* XmlParser::parseSphere(QXmlStreamReader& xml){
 	if(attr.hasAttribute("detalization")){
 		sphere->setDetalization(attr.value("detalization").toString().toFloat());
 	}
-	if(attr.hasAttribute("style")){
-		QString style = attr.value("style").toString().toLower();
-		if(style=="fill"){
-			sphere->setDrawStyle(GLU_FILL);
-		}else if(style=="line"){
-			sphere->setDrawStyle(GLU_LINE);
-		}else if(style=="point"){
-			sphere->setDrawStyle(GLU_POINT);
-		}else if(style=="silhouette"){
-			sphere->setDrawStyle(GLU_SILHOUETTE);
-		}else{
-			throw Exception::InvalidXmlQuadricDrawStyleException;
-		}
-	}
-	if(attr.hasAttribute("normals")){
-		QString normals = attr.value("normals").toString().toLower();
-		if(normals=="none"){
-			sphere->setNormalsType(GLU_NONE);
-		}else if(normals=="smooth"){
-			sphere->setNormalsType(GLU_SMOOTH);
-		}else if(normals=="flat"){
-			sphere->setNormalsType(GLU_FLAT);
-		}else{
-			throw Exception::InvalidXmlQuadricNormalsTypeException;
-		}
-	}
-	if(attr.hasAttribute("orientation")){
-		QString orientation = attr.value("orientation").toString().toLower();
-		if(orientation=="out"){
-			sphere->setOrientation(GLU_OUTSIDE);
-		}else if(orientation=="in"){
-			sphere->setOrientation(GLU_INSIDE);
-		}else{
-			throw Exception::InvalidXmlQuadricOrientationException;
-		}
-	}
-	if(attr.hasAttribute("uniform_texture")){
-		QString uniform_texture = attr.value("uniform_texture").toString().toLower();
-		if(uniform_texture=="true"){
-			sphere->setTextureUniform(GL_TRUE);
-		}else if(uniform_texture=="false"){
-			sphere->setTextureUniform(GL_FALSE);
-		}else{
-			throw Exception::InvalidXmlQuadricTextureMappingTypeException;
-		}
-	}
+	sphere->setQuadricAttributes(getQuadricFromAttributes(attr));
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="sphere")){
 		xml.readNext();
 	}
 	return sphere;
+}
+
+Cylinder* XmlParser::parseCylinder(QXmlStreamReader& xml){
+	Cylinder* cylinder = new Cylinder();
+	Point origin;
+	Color color = Color();
+	QStringList vals;
+	QXmlStreamAttributes attr = xml.attributes();
+	if(attr.hasAttribute("origin")){
+		vals = attr.value("origin").toString().split(",");
+		if(vals.count()==3){
+			GLfloat x,y,z;
+			x = vals.at(0).toFloat();
+			y = vals.at(1).toFloat();
+			z = vals.at(2).toFloat();
+			origin = Point(x,y,z);
+		}else{
+			throw Exception::InvalidXmlSphereOriginException;
+		}
+		if(attr.hasAttribute("color")){
+			color = getColor(attr.value("color").toString());
+			origin.setColor(color);
+		}
+		cylinder->setOrigin(origin);
+	}
+	if(attr.hasAttribute("baseRadius")){
+		cylinder->setBaseRadius(attr.value("baseRadius").toString().toFloat());
+	}
+	if(attr.hasAttribute("topRadius")){
+		cylinder->setTopRadius(attr.value("topRadius").toString().toFloat());
+	}
+	if(attr.hasAttribute("height")){
+		cylinder->setHeight(attr.value("height").toString().toFloat());
+	}
+	if(attr.hasAttribute("detalization")){
+		cylinder->setDetalization(attr.value("detalization").toString().toFloat());
+	}
+	cylinder->setQuadricAttributes(getQuadricFromAttributes(attr));
+	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="cylinder")){
+		xml.readNext();
+	}
+	return cylinder;
 }

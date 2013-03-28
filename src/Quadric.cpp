@@ -1,5 +1,13 @@
 #include "Quadric.h"
 
+Quadric::Quadric(){
+	this->empty = false;
+	this->drawStyle = GL_FILL;
+	this->normalsType = GLU_SMOOTH;
+	this->orientation = GLU_OUTSIDE;
+	this->uniformTexture = GL_TRUE;
+}
+
 bool Quadric::isEmpty(){
 	return this->empty;
 }
@@ -89,4 +97,11 @@ GLenum Quadric::isTextureUniform(){
 		throw Exception::EmptyQuadricException;
 	}
 	return this->uniformTexture;
+}
+
+void Quadric::setQuadricAttributes(Quadric quadric){
+	this->drawStyle = quadric.getDrawStyle();
+	this->normalsType = quadric.getNormalsType();
+	this->orientation = quadric.getOrientation();
+	this->uniformTexture = quadric.isTextureUniform();
 }

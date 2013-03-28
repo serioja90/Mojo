@@ -1,11 +1,11 @@
 #include "Sphere.h"
 
 Sphere::Sphere(){
-	this->empty = true;
+	this->empty = false;
 	this->origin = Point(0.0f,0.0f,0.0f);
 	this->radius = 0.5f;
 	this->detalization = 25;
-	this->drawStyle = GL_FILL;
+	this->setQuadricAttributes(Quadric());
 }
 
 Sphere::Sphere(Point origin, GLfloat radius, GLint detalization){
@@ -13,6 +13,7 @@ Sphere::Sphere(Point origin, GLfloat radius, GLint detalization){
 	this->origin = origin;
 	this->radius = radius;
 	this->detalization = detalization;
+	this->setQuadricAttributes(Quadric());
 }
 
 void Sphere::setOrigin(Point origin){

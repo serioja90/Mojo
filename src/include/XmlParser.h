@@ -22,9 +22,11 @@ class XmlParser{
 		Quad* parseQuad(QXmlStreamReader& xml);
 		Polygon* parsePolygon(QXmlStreamReader& xml);
 		Sphere* parseSphere(QXmlStreamReader& xml);
+		Cylinder* parseCylinder(QXmlStreamReader& xml);
 		Color parseColor(QXmlStreamReader& xml);
 		Color getColor(const QString&);
 		QList<MaterialParameter*> getMaterialParameters(QXmlStreamReader& xml);
+		Quadric getQuadricFromAttributes(QXmlStreamAttributes& attr);
 };
 
 #endif

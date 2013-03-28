@@ -37,6 +37,7 @@ HEADERS +=  src/include/MainWindow.h\
 			src/include/Material.h\
 			src/include/Quadric.h\
 			src/include/Sphere.h\
+			src/inclide/Cylinder.h\
 			src/include/Object.h
 SOURCES +=  src/main.cpp\
 			src/Exception.cpp\
@@ -58,6 +59,7 @@ SOURCES +=  src/main.cpp\
 			src/Material.cpp\
 			src/Quadric.cpp\
 			src/Sphere.cpp\
+			src/Cylinder.cpp\
 			src/Object.cpp
 
 RESOURCES += resources/icons.qrc
