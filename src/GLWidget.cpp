@@ -66,7 +66,7 @@ void GLWidget::initializeGL(){
 
 	//glEnable(GL_LIGHT0);
 	//glCullFace(GL_BACK);
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_RESCALE_NORMAL);
@@ -253,6 +253,15 @@ void GLWidget::paintObject(Object obj){
 			Sphere sphere = spheres.at(i);
 			Color color = sphere.getOrigin().getColor();
 			glColor4f(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+			QList<const MaterialParameter*> material_parameters = sphere.getMaterialParameters();
+			for(int j=0;j<material_parameters.count();j++){
+				const MaterialParameter* parameter = material_parameters.at(j);
+				if(parameter->hasVectorValue()){
+					glMaterialfv(parameter->getFace(),parameter->getParameter(),parameter->getVectorValue());
+				}else{
+					glMaterialf(parameter->getFace(),parameter->getParameter(),parameter->getValue());
+				}
+			}
 			glPushMatrix();
 				const GLfloat* origin = Point::toArray(sphere.getOrigin());
 				glTranslatef(origin[0],origin[1],origin[2]);
@@ -272,6 +281,15 @@ void GLWidget::paintObject(Object obj){
 			Cylinder cylinder = cylinders.at(i);
 			Color color = cylinder.getOrigin().getColor();
 			glColor4f(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+			QList<const MaterialParameter*> material_parameters = cylinder.getMaterialParameters();
+			for(int j=0;j<material_parameters.count();j++){
+				const MaterialParameter* parameter = material_parameters.at(j);
+				if(parameter->hasVectorValue()){
+					glMaterialfv(parameter->getFace(),parameter->getParameter(),parameter->getVectorValue());
+				}else{
+					glMaterialf(parameter->getFace(),parameter->getParameter(),parameter->getValue());
+				}
+			}
 			glPushMatrix();
 				const GLfloat* origin = Point::toArray(cylinder.getOrigin());
 				glTranslatef(origin[0],origin[1],origin[2]);
@@ -292,6 +310,15 @@ void GLWidget::paintObject(Object obj){
 			Disk disk = disks.at(i);
 			Color color = disk.getOrigin().getColor();
 			glColor4f(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+			QList<const MaterialParameter*> material_parameters = disk.getMaterialParameters();
+			for(int j=0;j<material_parameters.count();j++){
+				const MaterialParameter* parameter = material_parameters.at(j);
+				if(parameter->hasVectorValue()){
+					glMaterialfv(parameter->getFace(),parameter->getParameter(),parameter->getVectorValue());
+				}else{
+					glMaterialf(parameter->getFace(),parameter->getParameter(),parameter->getValue());
+				}
+			}
 			glPushMatrix();
 				const GLfloat* origin = Point::toArray(disk.getOrigin());
 				glTranslatef(origin[0],origin[1],origin[2]);

@@ -105,3 +105,11 @@ void Quadric::setQuadricAttributes(Quadric quadric){
 	this->orientation = quadric.getOrientation();
 	this->uniformTexture = quadric.isTextureUniform();
 }
+
+QList<const MaterialParameter*> Quadric::getMaterialParameters(){
+	return this->material.getParameters();
+}
+
+void Quadric::setMaterialParameter(MaterialParameter &param){
+	this->material.setParameter(param);
+}

@@ -50,10 +50,13 @@ Object XmlParser::parseObject(QXmlStreamReader& xml){
 					obj->addPolygon(parsePolygon(xml));
 				}else if(xml.name()=="sphere"){
 					obj->addSphere(parseSphere(xml));
+					qDebug() << "sphere parsed";
 				}else if(xml.name()=="cylinder"){
 					obj->addCylinder(parseCylinder(xml));
+					qDebug() << "cylinder parsed";
 				}else if(xml.name()=="disk"){
 					obj->addDisk(parseDisk(xml));
+					qDebug() << "disk parsed";
 				}
 			}
 		}catch(Exception e){
@@ -385,6 +388,7 @@ Sphere* XmlParser::parseSphere(QXmlStreamReader& xml){
 	Sphere* sphere = new Sphere();
 	Point origin;
 	Color color = Color();
+	QList<MaterialParameter*> material_parameters;
 	QStringList vals;
 	QXmlStreamAttributes attr = xml.attributes();
 	if(attr.hasAttribute("origin")){
@@ -413,6 +417,12 @@ Sphere* XmlParser::parseSphere(QXmlStreamReader& xml){
 	sphere->setQuadricAttributes(getQuadricFromAttributes(attr));
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="sphere")){
 		xml.readNext();
+		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="material"){
+			material_parameters = getMaterialParameters(xml);
+		}
+	}
+	for(int i=0;i<material_parameters.count();i++){
+		sphere->setMaterialParameter(*(material_parameters.at(i)));
 	}
 	return sphere;
 }
@@ -421,6 +431,7 @@ Cylinder* XmlParser::parseCylinder(QXmlStreamReader& xml){
 	Cylinder* cylinder = new Cylinder();
 	Point origin;
 	Color color = Color();
+	QList<MaterialParameter*> material_parameters;
 	QStringList vals;
 	QXmlStreamAttributes attr = xml.attributes();
 	if(attr.hasAttribute("origin")){
@@ -455,6 +466,12 @@ Cylinder* XmlParser::parseCylinder(QXmlStreamReader& xml){
 	cylinder->setQuadricAttributes(getQuadricFromAttributes(attr));
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="cylinder")){
 		xml.readNext();
+		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="material"){
+			material_parameters = getMaterialParameters(xml);
+		}
+	}
+	for(int i=0;i<material_parameters.count();i++){
+		cylinder->setMaterialParameter(*(material_parameters.at(i)));
 	}
 	return cylinder;
 }
@@ -463,6 +480,7 @@ Disk* XmlParser::parseDisk(QXmlStreamReader& xml){
 	Disk* disk = new Disk();
 	Point origin;
 	Color color = Color();
+	QList<MaterialParameter*> material_parameters;
 	QStringList vals;
 	QXmlStreamAttributes attr = xml.attributes();
 	if(attr.hasAttribute("origin")){
@@ -494,6 +512,12 @@ Disk* XmlParser::parseDisk(QXmlStreamReader& xml){
 	disk->setQuadricAttributes(getQuadricFromAttributes(attr));
 	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="disk")){
 		xml.readNext();
+		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="material"){
+			material_parameters = getMaterialParameters(xml);
+		}
+	}
+	for(int i=0;i<material_parameters.count();i++){
+		disk->setMaterialParameter(*(material_parameters.at(i)));
 	}
 	return disk;
 }
