@@ -204,10 +204,10 @@ const Exception Exception::EmptyQuadricException = Exception(
 	"Cannot set or get information for empty quadric"
 );
 
-const Exception Exception::InvalidXmlSphereOriginException = Exception(
+const Exception Exception::InvalidXmlQuadricOriginException = Exception(
 	31,
 	"InvalidXmlSphereOriginException",
-	"Invalid value for sphere origin"
+	"Invalid value for quadric origin"
 );
 
 const Exception Exception::InvalidXmlQuadricDrawStyleException = Exception(

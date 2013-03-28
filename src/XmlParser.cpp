@@ -396,7 +396,7 @@ Sphere* XmlParser::parseSphere(QXmlStreamReader& xml){
 			z = vals.at(2).toFloat();
 			origin = Point(x,y,z);
 		}else{
-			throw Exception::InvalidXmlSphereOriginException;
+			throw Exception::InvalidXmlQuadricOriginException;
 		}
 		if(attr.hasAttribute("color")){
 			color = getColor(attr.value("color").toString());
@@ -432,7 +432,7 @@ Cylinder* XmlParser::parseCylinder(QXmlStreamReader& xml){
 			z = vals.at(2).toFloat();
 			origin = Point(x,y,z);
 		}else{
-			throw Exception::InvalidXmlSphereOriginException;
+			throw Exception::InvalidXmlQuadricOriginException;
 		}
 		if(attr.hasAttribute("color")){
 			color = getColor(attr.value("color").toString());
@@ -474,7 +474,7 @@ Disk* XmlParser::parseDisk(QXmlStreamReader& xml){
 			z = vals.at(2).toFloat();
 			origin = Point(x,y,z);
 		}else{
-			throw Exception::InvalidXmlSphereOriginException;
+			throw Exception::InvalidXmlQuadricOriginException;
 		}
 		if(attr.hasAttribute("color")){
 			color = getColor(attr.value("color").toString());

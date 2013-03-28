@@ -42,7 +42,7 @@ class Exception{
 		static const Exception InvalidQuadricOrientationException;
 		static const Exception InvalidQuadricTextureMappingTypeException;
 		static const Exception EmptyQuadricException;
-		static const Exception InvalidXmlSphereOriginException;
+		static const Exception InvalidXmlQuadricOriginException;
 		static const Exception InvalidXmlQuadricDrawStyleException;
 		static const Exception InvalidXmlQuadricNormalsTypeException;
 		static const Exception InvalidXmlQuadricOrientationException;
