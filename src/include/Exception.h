@@ -47,6 +47,9 @@ class Exception{
 		static const Exception InvalidXmlQuadricNormalsTypeException;
 		static const Exception InvalidXmlQuadricOrientationException;
 		static const Exception InvalidXmlQuadricTextureMappingTypeException;
+		static const Exception InvalidSurfaceCurvesNumberException;
+		static const Exception InvalidSurfaceDetalizationException;
+		static const Exception InvalidSurfaceStyleException;
 	private:
 		int code;
 		QString name;

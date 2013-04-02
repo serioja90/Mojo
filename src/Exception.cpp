@@ -233,3 +233,21 @@ const Exception Exception::InvalidXmlQuadricTextureMappingTypeException = Except
 	"InvalidXmlQuadricTextureMappingTypeException",
 	"Invalid value for quadric texture mapping type"
 );
+
+const Exception Exception::InvalidSurfaceCurvesNumberException = Exception(
+	36,
+	"InvalidSurfaceCurvesNumberException",
+	"Ivalid value for surface cuves number attribute"
+);
+
+const Exception Exception::InvalidSurfaceDetalizationException = Exception(
+	37,
+	"InvalidSurfaceDetalizationException",
+	"Invalid value for surface detalization attribute"
+);
+
+const Exception Exception::InvalidSurfaceStyleException = Exception(
+	38,
+	"InvalidSurfaceStyleException",
+	"Invalid value for surface style attribute"
+);
