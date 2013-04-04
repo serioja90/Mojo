@@ -66,7 +66,7 @@ void GLWidget::initializeGL(){
 
 	//glEnable(GL_LIGHT0);
 	//glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_RESCALE_NORMAL);
@@ -76,7 +76,6 @@ void GLWidget::initializeGL(){
 	glMaterialf(GL_FRONT,GL_SHININESS,128.0f);
 	glMap1f(GL_MAP1_VERTEX_3,0.0f,100.0f,3,nPoints,&ctrlPoints[0][0]);
 	glEnable(GL_MAP1_VERTEX_3);
-	glMap2f(GL_MAP2_VERTEX_3,0.0f,10.0f,3,3,0.0f,10.0f,9,3,&ctrlPoints2[0][0][0]);
 	glEnable(GL_MAP2_VERTEX_3);
 	glEnable(GL_AUTO_NORMAL);
 	timer->start();
@@ -178,6 +177,7 @@ void GLWidget::paintObject(Object obj){
 	QList<Sphere> spheres = obj.getSpheres();
 	QList<Cylinder> cylinders = obj.getCylinders();
 	QList<Disk> disks = obj.getDisks();
+	QList<Surface> surfaces = obj.getSurfaces();
 	if(!points.empty()){
 		glBegin(GL_POINTS);
 			this->pointsToVertex(points);
@@ -330,6 +330,27 @@ void GLWidget::paintObject(Object obj){
 			glPopMatrix();
 		}
 		gluDeleteQuadric(quadric);
+	}
+
+	if(!surfaces.empty()){
+		for(int i=0;i<surfaces.count();i++){
+			Surface surface = surfaces.at(i);
+			GLint nRows = surface.getPoints().count()/surface.getCurves();
+			GLint curves = surface.getCurves();
+			GLfloat*** temp = surface.toArray();
+			GLfloat vertexes[nRows][curves][3];
+			for(int i=0;i<nRows;i++){
+				for(int j=0;j<curves;j++){
+					for(int k=0;k<3;k++){
+						vertexes[i][j][k] = temp[i][j][k];
+					}
+				}
+			}
+			glMap2f(GL_MAP2_VERTEX_3,0.0f,100.0f,3,curves,0.0f,100.0f,curves*3,nRows,vertexes[0][0]);
+			glMapGrid2f(surface.getDetalization(),0.0f,100.0f,surface.getDetalization(),0.0f,100.0f);
+			glEvalMesh2(surface.getStyle(),0,surface.getDetalization(),0,surface.getDetalization());
+			free(temp);
+		}
 	}
 }
 

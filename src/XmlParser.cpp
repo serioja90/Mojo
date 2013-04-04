@@ -57,6 +57,9 @@ Object XmlParser::parseObject(QXmlStreamReader& xml){
 				}else if(xml.name()=="disk"){
 					obj->addDisk(parseDisk(xml));
 					qDebug() << "disk parsed";
+				}else if(xml.name()=="surface"){
+					obj->addSurface(parseSurface(xml));
+					qDebug() << "surface parsed";
 				}
 			}
 		}catch(Exception e){
@@ -520,4 +523,42 @@ Disk* XmlParser::parseDisk(QXmlStreamReader& xml){
 		disk->setMaterialParameter(*(material_parameters.at(i)));
 	}
 	return disk;
+}
+
+Surface* XmlParser::parseSurface(QXmlStreamReader& xml){
+	Surface* surface = new Surface();
+	Color color = Color();
+	int vertexCount = 0;
+	QXmlStreamAttributes attr = xml.attributes();
+	if(attr.hasAttribute("curves")){
+		surface->setCurves(attr.value("curves").toString().toInt());
+	}
+	if(attr.hasAttribute("detalization")){
+		surface->setDetalization(attr.value("detalization").toString().toInt());
+	}
+	if(attr.hasAttribute("style")){
+		QString style = attr.value("style").toString().toLower();
+		if(style=="fill"){
+			surface->setStyle(GL_FILL);
+		}else if(style=="line"){
+			surface->setStyle(GL_LINE);
+		}else{
+			throw Exception::InvalidXmlSurfaceStyleException;
+		}
+	}
+	while(!xml.atEnd() && !xml.hasError() && !(xml.tokenType()==QXmlStreamReader::EndElement && xml.name()=="surface")){
+		xml.readNext();
+		if(xml.tokenType()==QXmlStreamReader::StartElement && xml.name()=="point"){
+			Point point = parsePoint(xml);
+			if(point.getColor().isEmpty() && !color.isEmpty()){
+				point.setColor(color);
+			}
+			surface->addPoint(point);
+			vertexCount++;
+		}
+	}
+	if(vertexCount % surface->getCurves()!=0){
+		throw Exception::InvalidXmlSurfacePointsNumberException;
+	}
+	return surface;
 }

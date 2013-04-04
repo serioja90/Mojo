@@ -50,6 +50,8 @@ class Exception{
 		static const Exception InvalidSurfaceCurvesNumberException;
 		static const Exception InvalidSurfaceDetalizationException;
 		static const Exception InvalidSurfaceStyleException;
+		static const Exception InvalidXmlSurfaceStyleException;
+		static const Exception InvalidXmlSurfacePointsNumberException;
 	private:
 		int code;
 		QString name;

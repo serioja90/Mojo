@@ -24,6 +24,7 @@ class XmlParser{
 		Sphere* parseSphere(QXmlStreamReader& xml);
 		Cylinder* parseCylinder(QXmlStreamReader& xml);
 		Disk* parseDisk(QXmlStreamReader& xml);
+		Surface* parseSurface(QXmlStreamReader& xml);
 		Color parseColor(QXmlStreamReader& xml);
 		Color getColor(const QString&);
 		QList<MaterialParameter*> getMaterialParameters(QXmlStreamReader& xml);

@@ -10,6 +10,7 @@
 #include "Sphere.h"
 #include "Cylinder.h"
 #include "Disk.h"
+#include "Surface.h"
 
 class Object{
 	public:
@@ -22,6 +23,7 @@ class Object{
 		void addSphere(Sphere* sphere);
 		void addCylinder(Cylinder* cylinder);
 		void addDisk(Disk* disk);
+		void addSurface(Surface* surface);
 		QList<Point> getPoints();
 		QList<Line> getLines();
 		QList<Triangle> getTriangles();
@@ -30,6 +32,7 @@ class Object{
 		QList<Sphere> getSpheres();
 		QList<Cylinder> getCylinders();
 		QList<Disk> getDisks();
+		QList<Surface> getSurfaces();
 	protected:
 		QList<Point>* points;
 		QList<Line*>* lines;
@@ -39,6 +42,7 @@ class Object{
 		QList<Sphere*>* spheres;
 		QList<Cylinder*>* cylinders;
 		QList<Disk*>* disks;
+		QList<Surface*>* surfaces;
 };
 
 #endif

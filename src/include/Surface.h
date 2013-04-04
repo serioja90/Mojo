@@ -11,6 +11,7 @@ class Surface{
 	public:
 		Surface();
 		Surface(QList<Point> points, GLint curves, GLint detalization, GLenum style);
+		void addPoint(Point point);
 		void setPoints(QList<Point> points);
 		void setCurves(GLint curves);
 		void setDetalization(GLint detalization);
@@ -19,6 +20,7 @@ class Surface{
 		GLint getCurves();
 		GLint getDetalization();
 		GLenum getStyle();
+		GLfloat*** toArray();
 	protected:
 		QList<Point> points;
 		GLint curves;

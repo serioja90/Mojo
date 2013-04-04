@@ -251,3 +251,15 @@ const Exception Exception::InvalidSurfaceStyleException = Exception(
 	"InvalidSurfaceStyleException",
 	"Invalid value for surface style attribute"
 );
+
+const Exception Exception::InvalidXmlSurfaceStyleException = Exception(
+	39,
+	"InvalidXmlSurfaceStyleException",
+	"Invalid value for surface style value"
+);
+
+const Exception Exception::InvalidXmlSurfacePointsNumberException = Exception(
+	40,
+	"InvalidXmlSurfacePointsNumberException",
+	"Invalid number of points for superface"
+);
