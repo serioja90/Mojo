@@ -12,6 +12,7 @@
 using namespace std;
 
 MainWindow::MainWindow(){
+	fileOpened = false;
 	glWidget = new GLWidget();
 	tabWidget = new QTabWidget();
 	textEdit = new QTextEdit();
@@ -53,6 +54,8 @@ void MainWindow::createToolBar(){
 	saveFileButton->setToolTip(tr("Save the current file"));
 	saveFileButton->setMaximumWidth(28);
 	saveFileButton->setCursor(Qt::PointingHandCursor);
+	saveFileButton->setShortcut(QKeySequence("Ctrl+S"));
+	connect(saveFileButton,SIGNAL(released()),this,SLOT(saveFile()));
 	toolBar->addWidget(saveFileButton);
 
 	addToolBar(toolBar);
@@ -63,22 +66,47 @@ void MainWindow::createNewFile(){
 }
 
 void MainWindow::openFile(){
-	QFileDialog fileDialog(this,Qt::Dialog);
-	QStringList filters,files;
-	filters << "XML files (*.xml)" << "Model files (*.mdl)";
-	fileDialog.setNameFilters(filters);
-	fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
-	fileDialog.exec();
-	files = fileDialog.selectedFiles();
-	if(!files.empty()){
-		QFile* file = new QFile(files.first());
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"",tr("XML files (*.xml)"));
+	if(fileName!=""){
+		file = new QFile(fileName);
 		file->open(QIODevice::ReadWrite);
 		QByteArray data = file->readAll();
+		file->close();
 		QString content(data);
 		xmlParser = new XmlParser(data);
 		glWidget->setObjects(xmlParser->getObjects());
 		QTextDocument document(content);
 		textEdit->setDocument(new QTextDocument(content));
+		fileOpened = true;
+	}
+}
+
+void MainWindow::saveFile(){
+	if(!fileOpened){
+		QString fileName = QFileDialog::getSaveFileName(this,
+			tr("Save File"),
+			"untitled.xml",tr("XML files (*.xml)"));
+		if(fileName!=""){
+			file = new QFile(fileName);
+			fileOpened = true;
+		}
+	}
+	if(fileOpened){
+		QByteArray text = textEdit->toPlainText().toAscii();
+		long bytes = -1;
+		qDebug() << "Writing " << (text.count()) << "bytes to " << (file->fileName());
+		file->open(QIODevice::WriteOnly);
+		bytes = file->write(text);
+		file->close();
+		if(bytes==text.count()){
+			qDebug() << "File successfully writed to " << (file->fileName());
+			xmlParser = new XmlParser(text);
+			glWidget->setObjects(xmlParser->getObjects());
+		}else if(bytes!=-1){
+			qDebug() << "Wrote " << bytes << " bytes to " << (file->fileName());
+		}else{
+			qDebug() << "Failed to save " << (file->fileName());
+		}
 	}
 }
 

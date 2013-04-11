@@ -16,6 +16,7 @@ class MainWindow : public QMainWindow{
 	public:
 		MainWindow();
 	private:
+		bool fileOpened;
 		QMenu* fileMenu;
 		QAction* fileNew;
 
@@ -31,9 +32,12 @@ class MainWindow : public QMainWindow{
 
 		void createToolBar();
 		void keyPressEvent(QKeyEvent* event);
+
+		QFile* file;
 	private slots:
 		void createNewFile();
 		void openFile();
+		void saveFile();
 };
 
 #endif
