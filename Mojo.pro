@@ -14,6 +14,7 @@ RCC_DIR = build/rcc
 UI_DIR = build/ui
 
 QT += opengl
+QT += widgets
 
 LIBS += -lGL -lGLU
 

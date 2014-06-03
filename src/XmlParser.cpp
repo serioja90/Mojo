@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QMessageBox>
 #include <GL/gl.h>
 #include <iostream>
 

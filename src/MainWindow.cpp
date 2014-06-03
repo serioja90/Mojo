@@ -3,7 +3,9 @@
 #include <QPushButton>
 #include <QIcon>
 #include <QSize>
+#include <QAction>
 #include <QFileDialog>
+#include <QMenuBar>
 
 #include <iostream>
 
@@ -92,7 +94,7 @@ void MainWindow::saveFile(){
 		}
 	}
 	if(fileOpened){
-		QByteArray text = textEdit->toPlainText().toAscii();
+		QByteArray text = textEdit->toPlainText().toLatin1();
 		long bytes = -1;
 		qDebug() << "Writing " << (text.count()) << "bytes to " << (file->fileName());
 		file->open(QIODevice::WriteOnly);
